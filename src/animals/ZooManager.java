@@ -1,6 +1,6 @@
-package controller;
+package animals;
 
-import model.*;
+import animals.domain.*;
 
 import java.time.LocalDate;
 import java.util.*;
