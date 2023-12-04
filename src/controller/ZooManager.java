@@ -1,9 +1,8 @@
 package controller;
 
-import model.Animal;
-import model.TailedAnimal;
-import model.WingedAnimal;
+import model.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class ZooManager {
@@ -19,6 +18,15 @@ public class ZooManager {
             return;
         }
         animalsMap.computeIfAbsent(animal.getClass(), k -> new ArrayList<>()).add(animal);
+    }
+
+    public void initializeZoo() {
+        addAnimal(new Eagle("Eagle1", "abc", 3, LocalDate.now(), 25, 100, 100));
+        addAnimal(new Eagle("Eagle2", "cvb", 5, LocalDate.now(), 30, 110, 150));
+        addAnimal(new Lion("Lion1", "abc", 3, LocalDate.now(), 150, 124, 70));
+        addAnimal(new Lion("Lion2", "cvb", 5, LocalDate.now(), 160, 136, 59));
+        addAnimal(new Tiger("Tiger1", "abc", 3, LocalDate.now(), 120, 111, 32));
+        addAnimal(new Tiger("Tiger2", "cvb", 5, LocalDate.now(), 140, 124, 43));
     }
 
     private <T extends Animal> List<T> getSpeciesList(Class<T> animalSpecificClass) {
