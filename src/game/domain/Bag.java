@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Bag {
+    //TODO maybe set
     private List<Item> itemList;
     private final int TOTAL_SLOTS = 10;
     private int filledSlots;
@@ -34,6 +35,6 @@ public class Bag {
     public String toString() {
         return this.getItemList().stream()
                 .map(Item::getName)
-                .collect(Collectors.joining(", ", "In bag: ", "."));
+                .collect(Collectors.joining(", ", "In bag: ",""));
     }
 }

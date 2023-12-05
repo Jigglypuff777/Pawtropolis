@@ -27,6 +27,12 @@ public class ZooManager {
         addAnimal(new Lion("Lion2", "cvb", 5, LocalDate.now(), 160, 136, 59));
         addAnimal(new Tiger("Tiger1", "abc", 3, LocalDate.now(), 120, 111, 32));
         addAnimal(new Tiger("Tiger2", "cvb", 5, LocalDate.now(), 140, 124, 43));
+        addAnimal(new Eagle("Eagle3", "abc", 3, LocalDate.now(), 25, 100, 100));
+        addAnimal(new Eagle("Eagle4", "cvb", 5, LocalDate.now(), 30, 110, 150));
+        addAnimal(new Lion("Lion3", "abc", 3, LocalDate.now(), 150, 124, 70));
+        addAnimal(new Lion("Lion4", "cvb", 5, LocalDate.now(), 160, 136, 59));
+        addAnimal(new Tiger("Tiger3", "abc", 3, LocalDate.now(), 120, 111, 32));
+        addAnimal(new Tiger("Tiger4", "cvb", 5, LocalDate.now(), 140, 124, 43));
     }
 
     private <T extends Animal> List<T> getSpeciesList(Class<T> animalSpecificClass) {
@@ -79,6 +85,19 @@ public class ZooManager {
         return getSpeciesList(WingedAnimal.class)
                 .stream()
                 .max(Comparator.comparing(WingedAnimal::getWingspan));
+    }
+
+    public Set<Animal> getRandomAnimalsList(int quantity) {
+        Random random = new Random();
+        Set<Animal> animalsSet = new HashSet<>();
+        List<Animal> allAnimalsList = animalsMap.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .toList();
+        for (int i = 0; i < quantity; i++) {
+            animalsSet.add(allAnimalsList.get(random.nextInt(allAnimalsList.size())));
+        }
+        return animalsSet;
     }
 
 }

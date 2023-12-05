@@ -23,7 +23,6 @@ public class GameController {
 
         while (!gameEnded) {
             String input;
-            String output = null;
             System.out.println("What do you wanna do?");
             System.out.print(">");
             input = InputController.readString();
@@ -31,65 +30,99 @@ public class GameController {
             String[] parts = input.split("\\s+");
 
             if (parts.length > 2) {
-                return;
-                // TODO messaggio di errore
+                System.out.println("Invalid input");
+                continue;
             }
 
-            switch (parts[0]) {
+            switch (parts[0].toLowerCase()) {
                 case "go" -> {
-                    if (parts[1].equals("north") || parts[1].equals("south") || parts[1].equals("west") || parts[1].equals("east")) {
-                        go(currentRoom, parts[1]);
+                    if (parts.length == 2) {
+                        currentRoom = go(currentRoom, parts[1]);
+                    } else {
+                        System.out.println("Invalid input");
                     }
                 }
 
-                case "look" -> output = look(currentRoom);
+                case "look" -> look(currentRoom);
 
-                case "bag" -> output = bag(player);
+                case "bag" -> bag(player);
 
                 case "get" -> {
-                    if (currentRoom.getCurrentRoomItems().stream()
-                            .map(Item::getName)
-                            .collect(Collectors.toSet()).contains(parts[1])) {
+                    if (parts.length == 2) {
                         get(parts[1], currentRoom, player);
+                    } else {
+                        System.out.println("Invalid input");
                     }
                 }
 
                 case "drop" -> {
-                    if (player.getBag().getItemList().stream()
-                            .map(Item::getName)
-                            .collect(Collectors.toSet()).contains(parts[1])) {
+                    if (parts.length == 2) {
                         drop(parts[1], currentRoom, player);
+                    } else {
+                        System.out.println("Invalid input");
                     }
                 }
 
                 case "exit" -> gameEnded = true;
 
                 default -> {
+                    System.out.println("Invalid input");
                 }
-                // TODO messaggio di errore
-            }
 
-            if (output != null) {
-                System.out.println(output);
             }
         }
     }
 
-    private String look(Room currentRoom) {
-        return currentRoom.toString();
+    private void look(Room currentRoom) {
+        System.out.println(currentRoom.toString());
     }
 
-    private String bag(Player player) {
-        return player.getBag().toString();
+    private void bag(Player player) {
+        System.out.println(player.getBag().toString());
     }
 
-    private String go(Room currentRoom, String direction) {
-        return currentRoom.toString();
+    private Room go(Room currentRoom, String direction) {
+        // controlliamo se l'input NON è giusto, in particolare se la seconda parola splittata è effettivamente una
+        // delle quattro valide (north, south...)
+         if (!("north".equalsIgnoreCase(direction) || "south".equalsIgnoreCase(direction)
+                 || "west".equalsIgnoreCase(direction) || "east".equalsIgnoreCase(direction))) {
+             System.out.println("Invalid input");
+             return currentRoom;
+        }
+
+         // se siamo qui, l'input è giusto
+        direction = direction.toLowerCase();
+
+        // ora check se la stanza ha la porta richiesta
+        if (currentRoom.getAdjacentRooms().containsKey(direction)){
+
+            //controllo se oltre la porta ci sia gia una stanza creata
+            if (currentRoom.getAdjacentRooms().get(direction) == null){
+                //colleghiamo le due stanze, creando la nuova e legandole con una porta comune ed inversa
+                currentRoom.getAdjacentRooms().put(direction, Room.createRandomRoom(currentRoom, direction));
+            }
+
+            // prendiamo la nuova stanza
+            Room newCurrentRoom = currentRoom.getAdjacentRooms().get(direction);
+
+            //la stampiamo
+            System.out.println(newCurrentRoom.toString());
+
+            //ritorniamo la nuova room che nel runGame sarà la nuova currentRoom
+            return newCurrentRoom;
+        }
+
+        // se non esiste la stanza
+        System.out.println("The " + direction + " room doesn't exist.");
+
+        return currentRoom;
+
+
     }
 
     private void get(String itemName, Room currentRoom, Player player) {
         Optional<Item> optionalItem = currentRoom.getCurrentRoomItems().stream()
-                .filter(i -> i.getName().equals(itemName))
+                .filter(i -> i.getName().equalsIgnoreCase(itemName))
                 .findFirst();
 
         if (optionalItem.isEmpty()) {
