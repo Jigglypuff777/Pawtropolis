@@ -5,16 +5,17 @@ import game.domain.Item;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Room {
     private String name;
-    private List<Item> itemList;
+    private List<Item> currentRoomItems;
     private List<Animal> currentRoomAnimals;
     private Map<String, Room> adjacentRooms;
 
-    public Room(String name, List<Item> itemList, List<Animal> currentRoomAnimals, Map<String, Room> adjacentRooms) {
+    public Room(String name, List<Item> currentRoomItems, List<Animal> currentRoomAnimals, Map<String, Room> adjacentRooms) {
         this.name = name;
-        this.itemList = itemList;
+        this.currentRoomItems = currentRoomItems;
         this.currentRoomAnimals = currentRoomAnimals;
         this.adjacentRooms = adjacentRooms;
     }
@@ -27,12 +28,12 @@ public class Room {
         this.name = name;
     }
 
-    public List<Item> getItem() {
-        return itemList;
+    public List<Item> getCurrentRoomItems() {
+        return currentRoomItems;
     }
 
-    public void setItem(List<Item> item) {
-        this.itemList = item;
+    public void setItems(List<Item> items) {
+        this.currentRoomItems = items;
     }
 
     public List<Animal> getCurrentRoomAnimals() {
@@ -49,5 +50,18 @@ public class Room {
 
     public void setAdjacentRooms(Map<String, Room> adjacentRooms) {
         this.adjacentRooms = adjacentRooms;
+    }
+
+    @Override
+    public String toString() {
+        String currentRoomItemsString = this.getCurrentRoomItems().stream()
+                .map(Item::getName)
+                .collect(Collectors.joining(", ", "Items: ", ".")) + "\n";
+
+        String currentRoomAnimalsString = this.getCurrentRoomAnimals().stream()
+                .map(animal -> animal.getName().concat("(" + animal.getClass().getSimpleName() + ")"))
+                .collect(Collectors.joining(", ", "NPC: ", "."));
+
+        return "You are in " + this.getName() + "\n" + currentRoomItemsString + currentRoomAnimalsString;
     }
 }
