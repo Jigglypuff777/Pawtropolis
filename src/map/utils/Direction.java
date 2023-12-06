@@ -3,38 +3,31 @@ package map.utils;
 import java.util.Random;
 
 public enum Direction {
-    NORTH("north"),
-    SOUTH("south"),
-    EAST("east"),
-    WEST("west");
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST;
 
-    private final String label;
     private static final Random random = new Random();
 
-    Direction(String label) {
-        this.label = label;
+    // TODO rimuovere??
+    Direction() {
+
     }
 
-    public static String randomDirection() {
+    public static Direction randomDirection() {
         Direction[] directions = values();
-        return directions[random.nextInt(directions.length)].label;
+        return directions[random.nextInt(directions.length)];
     }
 
-
-
-    public static String getOppositeDirection(String directionLabel) {
-        switch (directionLabel) {
-            case "north":
-                return SOUTH.label;
-            case "south":
-                return NORTH.label;
-            case "east":
-                return WEST.label;
-            case "west":
-                return EAST.label;
-            default:
-                return null;
-        }
+    public static Direction getOppositeDirection(String directionLabel) {
+        return switch (directionLabel) {
+            case "north" -> SOUTH;
+            case "south" -> NORTH;
+            case "east" -> WEST;
+            case "west" -> EAST;
+            default -> null;
+        };
     }
 
 

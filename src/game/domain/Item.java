@@ -5,10 +5,10 @@ public class Item {
     private String description;
     private int requiredSlots;
 
-    public Item(String name, String description, int requiredSlots) {
+    public Item(String name, int requiredSlots) {
         this.name = name;
-        this.description = description;
         this.requiredSlots = requiredSlots;
+        this.description = generateItemDescription();
     }
 
     public String getName() {
@@ -33,5 +33,9 @@ public class Item {
 
     public void setRequiredSlots(int requiredSlots) {
         this.requiredSlots = requiredSlots;
+    }
+
+    public String generateItemDescription() {
+        return "The " + this.name + " item requires " + this.requiredSlots + " slot";
     }
 }

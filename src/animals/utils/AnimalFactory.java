@@ -10,9 +10,10 @@ import java.util.*;
 
 public class AnimalFactory {
     private final Random random = new Random();
-    private List<String> nameList = new ArrayList<>(Arrays.asList("Fuffi", "Spot", "Gwaihir", "Shaggy", "Ciccio"));
-    private List<String> foodList = new ArrayList<>(Arrays.asList("Meat", "Fruit", "Steak", "Caccole", "Fish"));
+    private final List<String> nameList = new ArrayList<>(Arrays.asList("Fuffi", "Spot", "Gwaihir", "Shaggy", "Ciccio"));
+    private final List<String> foodList = new ArrayList<>(Arrays.asList("Meat", "Fruit", "Steak", "Caccole", "Fish"));
 
+    // TODO rimuovere??
     public AnimalFactory() {
     }
 
