@@ -1,7 +1,6 @@
 package map.domain;
 
 import animals.domain.Animal;
-import animals.utils.AnimalFactory;
 import game.domain.Item;
 import map.utils.Direction;
 
@@ -14,6 +13,7 @@ public class Room {
     private Set<Animal> currentRoomAnimals;
     private Map<Direction, Room> adjacentRooms;
 
+    // TODO rimuovere???
     public Room() {
     }
 

@@ -86,18 +86,4 @@ public class ZooManager {
                 .stream()
                 .max(Comparator.comparing(WingedAnimal::getWingspan));
     }
-
-    public Set<Animal> getRandomAnimalsList(int quantity) {
-        Random random = new Random();
-        Set<Animal> animalsSet = new HashSet<>();
-        List<Animal> allAnimalsList = animalsMap.values()
-                .stream()
-                .flatMap(Collection::stream)
-                .toList();
-        for (int i = 0; i < quantity; i++) {
-            animalsSet.add(allAnimalsList.get(random.nextInt(allAnimalsList.size())));
-        }
-        return animalsSet;
-    }
-
 }

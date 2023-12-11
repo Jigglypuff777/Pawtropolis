@@ -18,7 +18,7 @@ public class GameController {
     }
 
     public void runGame() {
-        Room currentRoom = roomFactory.createFirstRandomRoom();
+        Room currentRoom = roomFactory.createRandomRoom();
         boolean gameEnded = false;
         String input;
 
@@ -33,7 +33,7 @@ public class GameController {
             System.out.print(">");
             input = InputController.readString();
 
-            String[] parts = input.split("\\s+");
+            String[] parts = input.trim().split("\\s+");
 
             if (parts.length > 2) {
                 System.out.println(INVALID_INPUT_STRING);
@@ -71,28 +71,27 @@ public class GameController {
         System.out.println(player.getBag().toString());
     }
 
-    private Room go(Room currentRoom, String direction) {
-        // controlliamo se l'input NON è giusto, in particolare se la seconda parola splittata è effettivamente una
-        // delle quattro valide (north, south...)
-        direction = direction.toLowerCase();
+    private Room go(Room currentRoom, String inputString) {
+        Direction direction;
 
-        if (!("north".equals(direction) || "south".equals(direction)
-                || "west".equals(direction) || "east".equals(direction))) {
+        try {
+            direction = Direction.valueOf(inputString.toUpperCase());
+        } catch (IllegalArgumentException exception) {
             System.out.println(INVALID_INPUT_STRING);
             return currentRoom;
         }
 
         // ora check se la stanza ha la porta richiesta
-        if (currentRoom.getAdjacentRooms().containsKey(Direction.valueOf(direction.toUpperCase()))) {
+        if (currentRoom.getAdjacentRooms().containsKey(direction)) {
 
             //controllo se oltre la porta ci sia gia una stanza creata
-            if (currentRoom.getAdjacentRooms().get(Direction.valueOf(direction.toUpperCase())) == null) {
-                //colleghiamo le due stanze, creando la nuova e legandole con una porta comune ed inversa
-                currentRoom.getAdjacentRooms().put(Direction.valueOf(direction.toUpperCase()), roomFactory.createRandomRoom(currentRoom, direction));
+            if (currentRoom.getAdjacentRooms().get(direction) == null) {
+                //colleghiamo le due stanze, creando la nuova e legandole con una porta comune e inversa
+                currentRoom.getAdjacentRooms().put(direction, roomFactory.createRandomRoom(currentRoom, direction));
             }
 
             // prendiamo la nuova stanza
-            Room newCurrentRoom = currentRoom.getAdjacentRooms().get(Direction.valueOf(direction.toUpperCase()));
+            Room newCurrentRoom = currentRoom.getAdjacentRooms().get(direction);
 
             //la stampiamo
             System.out.println(newCurrentRoom.toString());
