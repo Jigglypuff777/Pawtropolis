@@ -12,13 +12,14 @@ import java.util.Optional;
 public class GameController {
     private final RoomFactory roomFactory = new RoomFactory();
     private static final String INVALID_INPUT_STRING = "Invalid input";
+    private Room currentRoom;
 
     // TODO rimuovere??
     public GameController() {
+        currentRoom = roomFactory.createRandomRoom();
     }
 
     public void runGame() {
-        Room currentRoom = roomFactory.createRandomRoom();
         boolean gameEnded = false;
         String input;
 
@@ -41,7 +42,7 @@ public class GameController {
 
             else if (parts.length == 2) {
                 switch (parts[0].toLowerCase()) {
-                    case "go" -> currentRoom = go(currentRoom, parts[1]);
+                    case "go" ->  go(parts[1]);
                     case "drop" -> drop(parts[1], currentRoom, player);
                     case "get" -> get(parts[1], currentRoom, player);
                     default -> System.out.println(INVALID_INPUT_STRING);
@@ -71,14 +72,14 @@ public class GameController {
         System.out.println(player.getBag().toString());
     }
 
-    private Room go(Room currentRoom, String inputString) {
+    private void go(String inputString) {
         Direction direction;
 
         try {
             direction = Direction.valueOf(inputString.toUpperCase());
         } catch (IllegalArgumentException exception) {
             System.out.println(INVALID_INPUT_STRING);
-            return currentRoom;
+            return;
         }
 
         // ora check se la stanza ha la porta richiesta
@@ -97,13 +98,12 @@ public class GameController {
             System.out.println(newCurrentRoom.toString());
 
             //ritorniamo la nuova room che nel runGame sarà la nuova currentRoom
-            return newCurrentRoom;
+            this.currentRoom = newCurrentRoom;
+            return;
         }
 
         // se non esiste la stanza
-        System.out.println("The " + direction + " room doesn't exist.");
-
-        return currentRoom;
+        System.out.println("The " + direction.toString().toLowerCase() + " room doesn't exist.");
     }
 
     private void get(String itemName, Room currentRoom, Player player) {

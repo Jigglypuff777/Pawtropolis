@@ -31,7 +31,6 @@ public class RoomFactory {
             newMap.putIfAbsent(newDirection, null);
         }
         newCurrentRoom.setAdjacentRooms(newMap);
-        System.out.println(newCurrentRoom.getAdjacentRooms().keySet());
         return newCurrentRoom;
     }
 
@@ -51,7 +50,6 @@ public class RoomFactory {
             newMap.putIfAbsent(newDirection, null);
         }
         newCurrentRoom.setAdjacentRooms(newMap);
-        System.out.println(newCurrentRoom.getAdjacentRooms().keySet());
         return newCurrentRoom;
     }
 }
