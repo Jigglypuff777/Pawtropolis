@@ -5,51 +5,39 @@ import game.utils.ItemFactory;
 import map.domain.Room;
 
 import java.util.*;
-
+// TODO singleton
 public class RoomFactory {
 
-    private final Random random = new Random();
-    private final AnimalFactory animalFactory = new AnimalFactory();
-    private final ItemFactory itemFactory = new ItemFactory();
+    private final Random random;
+    private final AnimalFactory animalFactory;
+    private final ItemFactory itemFactory;
 
-    // TODO rimuovere??
     public RoomFactory() {
+        random = new Random();
+        animalFactory = new AnimalFactory();
+        itemFactory = new ItemFactory();
     }
 
-    // TODO overloaded??
     public Room createRandomRoom() {
-        Room newCurrentRoom = new Room();
-        newCurrentRoom.setName("Room" + random.nextInt(100));
-        newCurrentRoom.setCurrentRoomAnimals(animalFactory.getRandomAnimalsSet(3));
-        newCurrentRoom.setCurrentRoomItems(itemFactory.getRandomItemsSet(5));
-        Map<Direction, Room> newMap = new EnumMap<>(Direction.class);
+        Room newRoom = new Room("Room" + random.nextInt(100));
+        newRoom.setAnimals(animalFactory.getRandomAnimalsSet(3));
+        newRoom.setItems(itemFactory.getRandomItemsSet(5));
+        Map<Direction, Room> adjacentRooms = new EnumMap<>(Direction.class);
 
         List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));
-        int additionalDoors = random.nextInt(1, 5);
-        for (int i = 0; i < additionalDoors; i++) {
-            Direction newDirection = availableDirectionsList.remove(random.nextInt(availableDirectionsList.size()));
-            newMap.putIfAbsent(newDirection, null);
+        int availableDirectionsNumber = random.nextInt(1, availableDirectionsList.size() + 1);
+        for (int i = 0; i < availableDirectionsNumber; i++) {
+            int randomDirectionIndex = random.nextInt(availableDirectionsList.size());
+            Direction newDirection = availableDirectionsList.remove(randomDirectionIndex);
+            adjacentRooms.putIfAbsent(newDirection, null);
         }
-        newCurrentRoom.setAdjacentRooms(newMap);
-        return newCurrentRoom;
+        newRoom.setAdjacentRooms(adjacentRooms);
+        return newRoom;
     }
 
-    public Room createRandomRoom(Room previousRoom, Direction previousDirection) {
-        Room newCurrentRoom = new Room();
-        newCurrentRoom.setName("Room" + random.nextInt(100));
-        newCurrentRoom.setCurrentRoomAnimals(animalFactory.getRandomAnimalsSet(3));
-        newCurrentRoom.setCurrentRoomItems(itemFactory.getRandomItemsSet(5));
-        Map<Direction, Room> newMap = new EnumMap<>(Direction.class);
-        newMap.put(Direction.getOppositeDirection(previousDirection), previousRoom);
-
-        List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));
-        availableDirectionsList.remove(Direction.getOppositeDirection(previousDirection));
-        int additionalDoors = random.nextInt(1, 4);
-        for (int i = 0; i < additionalDoors; i++) {
-            Direction newDirection = availableDirectionsList.remove(random.nextInt(availableDirectionsList.size()));
-            newMap.putIfAbsent(newDirection, null);
-        }
-        newCurrentRoom.setAdjacentRooms(newMap);
+    public Room createRandomRoom(Room linkedRoom, Direction linkedDirection) {
+        Room newCurrentRoom = createRandomRoom();
+        newCurrentRoom.getAdjacentRooms().put(Direction.getOppositeDirection(linkedDirection), linkedRoom);
         return newCurrentRoom;
     }
 }

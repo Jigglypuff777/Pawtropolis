@@ -9,12 +9,13 @@ import java.util.stream.Collectors;
 
 public class Room {
     private String name;
-    private Set<Item> currentRoomItems;
-    private Set<Animal> currentRoomAnimals;
+    private Set<Item> items;
+    private Set<Animal> animals;
     private Map<Direction, Room> adjacentRooms;
 
     // TODO rimuovere???
-    public Room() {
+    public Room(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -25,20 +26,20 @@ public class Room {
         this.name = name;
     }
 
-    public Set<Item> getCurrentRoomItems() {
-        return currentRoomItems;
+    public Set<Item> getItems() {
+        return items;
     }
 
-    public void setCurrentRoomItems(Set<Item> items) {
-        this.currentRoomItems = items;
+    public void setItems(Set<Item> items) {
+        this.items = items;
     }
 
-    public Set<Animal> getCurrentRoomAnimals() {
-        return currentRoomAnimals;
+    public Set<Animal> getAnimals() {
+        return animals;
     }
 
-    public void setCurrentRoomAnimals(Set<Animal> currentRoomAnimals) {
-        this.currentRoomAnimals = currentRoomAnimals;
+    public void setAnimals(Set<Animal> animals) {
+        this.animals = animals;
     }
 
     public Map<Direction, Room> getAdjacentRooms() {
@@ -51,14 +52,14 @@ public class Room {
 
     @Override
     public String toString() {
-        String currentRoomItemsString = this.getCurrentRoomItems().stream()
+        String itemsString = getItems().stream()
                 .map(Item::getName)
                 .collect(Collectors.joining(", ", "Items: ", "\n"));
 
-        String currentRoomAnimalsString = this.getCurrentRoomAnimals().stream()
+        String animalsString = getAnimals().stream()
                 .map(animal -> animal.getName().concat("(" + animal.getClass().getSimpleName() + ")"))
                 .collect(Collectors.joining(", ", "NPC: ", ""));
 
-        return "You are in " + this.getName() + "\n" + currentRoomItemsString + currentRoomAnimalsString;
+        return "You are in " + getName() + "\n" + itemsString + animalsString;
     }
 }

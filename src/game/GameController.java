@@ -13,11 +13,6 @@ public class GameController {
     private final RoomFactory roomFactory = new RoomFactory();
     private static final String INVALID_INPUT_STRING = "Invalid input";
 
-    // TODO rimuovere???
-    public GameController() {
-
-    }
-
     public void runGame() {
         Room currentRoom = roomFactory.createRandomRoom();
         boolean gameEnded = false;
@@ -107,7 +102,7 @@ public class GameController {
     }
 
     private void get(String itemName, Room currentRoom, Player player) {
-        Optional<Item> optionalItem = currentRoom.getCurrentRoomItems().stream()
+        Optional<Item> optionalItem = currentRoom.getItems().stream()
                 .filter(i -> i.getName().equalsIgnoreCase(itemName))
                 .findFirst();
 
@@ -124,7 +119,7 @@ public class GameController {
         }
 
         player.getBag().getItemList().add(item);
-        currentRoom.getCurrentRoomItems().remove(item);
+        currentRoom.getItems().remove(item);
         player.getBag().setFilledSlots(player.getBag().getFilledSlots() + item.getRequiredSlots());
     }
 
@@ -140,7 +135,7 @@ public class GameController {
 
         Item item = optionalItem.get();
 
-        currentRoom.getCurrentRoomItems().add(item);
+        currentRoom.getItems().add(item);
         player.getBag().getItemList().remove(item);
         player.getBag().setFilledSlots(player.getBag().getFilledSlots() - item.getRequiredSlots());
     }
