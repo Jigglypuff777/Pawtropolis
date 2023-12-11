@@ -10,11 +10,10 @@ import map.utils.RoomFactory;
 import java.util.Optional;
 
 public class GameController {
-    private final RoomFactory roomFactory = new RoomFactory();
     private static final String INVALID_INPUT_STRING = "Invalid input";
 
     public void runGame() {
-        Room currentRoom = roomFactory.createRandomRoom();
+        Room currentRoom = RoomFactory.getInstance().createRandomRoom();
         boolean gameEnded = false;
         String input;
 
@@ -83,7 +82,7 @@ public class GameController {
             //controllo se oltre la porta ci sia gia una stanza creata
             if (currentRoom.getAdjacentRooms().get(direction) == null) {
                 //colleghiamo le due stanze, creando la nuova e legandole con una porta comune e inversa
-                currentRoom.getAdjacentRooms().put(direction, roomFactory.createRandomRoom(currentRoom, direction));
+                currentRoom.getAdjacentRooms().put(direction, RoomFactory.getInstance().createRandomRoom(currentRoom, direction));
             }
 
             // prendiamo la nuova stanza

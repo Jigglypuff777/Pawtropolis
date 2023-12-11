@@ -9,12 +9,20 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class AnimalFactory {
-    private final Random random = new Random();
+    private static AnimalFactory instance = null;
+    private final Random random;
     private final List<String> nameList = new ArrayList<>(Arrays.asList("Fuffi", "Spot", "Gwaihir", "Shaggy", "Ciccio"));
     private final List<String> foodList = new ArrayList<>(Arrays.asList("Meat", "Fruit", "Steak", "Caccole", "Fish"));
 
-    // TODO rimuovere??
-    public AnimalFactory() {
+    private AnimalFactory() {
+        random = new Random();
+    }
+
+    public static AnimalFactory getInstance() {
+        if (instance == null) {
+            instance = new AnimalFactory();
+        }
+        return instance;
     }
 
     public Animal getRandomAnimal(){

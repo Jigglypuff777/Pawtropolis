@@ -5,23 +5,30 @@ import game.utils.ItemFactory;
 import map.domain.Room;
 
 import java.util.*;
-// TODO singleton
+
 public class RoomFactory {
-
+    private static RoomFactory instance = null;
     private final Random random;
-    private final AnimalFactory animalFactory;
-    private final ItemFactory itemFactory;
 
-    public RoomFactory() {
+    private RoomFactory() {
         random = new Random();
-        animalFactory = new AnimalFactory();
-        itemFactory = new ItemFactory();
     }
+
+    public static RoomFactory getInstance() {
+        if (instance == null) {
+            instance = new RoomFactory();
+        }
+        return instance;
+    }
+
+//    public Room createGameMap(int depth) {
+//
+//    }
 
     public Room createRandomRoom() {
         Room newRoom = new Room("Room" + random.nextInt(100));
-        newRoom.setAnimals(animalFactory.getRandomAnimalsSet(3));
-        newRoom.setItems(itemFactory.getRandomItemsSet(5));
+        newRoom.setAnimals(AnimalFactory.getInstance().getRandomAnimalsSet(3));
+        newRoom.setItems(ItemFactory.getInstance().getRandomItemsSet(5));
         Map<Direction, Room> adjacentRooms = new EnumMap<>(Direction.class);
 
         List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));

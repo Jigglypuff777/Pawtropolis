@@ -3,7 +3,6 @@ package game.domain;
 public class Player {
     private final String name;
     private final int lifePoints;
-    // TODO static???
     private static final int DEFAULT_LIFE_POINTS = 20;
     private final Bag bag;
 

@@ -5,8 +5,8 @@ import game.domain.Item;
 import java.util.*;
 
 public class ItemFactory {
-
-    private final Random random = new Random();
+    private static ItemFactory instance = null;
+    private final Random random;
     private final Map<String, Integer> itemsMap = Map.of(
             "Coltello",1,
             "Katana", 2,
@@ -20,9 +20,15 @@ public class ItemFactory {
             "Antidoto", 4
             );
 
-    // TODO rimuovere??
-    public ItemFactory() {
+    private ItemFactory() {
+        random = new Random();
+    }
 
+    public static ItemFactory getInstance() {
+        if (instance == null) {
+            instance = new ItemFactory();
+        }
+        return instance;
     }
 
     public Item getRandomItem() {

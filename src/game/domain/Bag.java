@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 public class Bag {
     private final List<Item> itemList;
-    // TODO static???
     private static final int TOTAL_SLOTS = 10;
     private int filledSlots;
 

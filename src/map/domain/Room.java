@@ -13,7 +13,6 @@ public class Room {
     private Set<Animal> animals;
     private Map<Direction, Room> adjacentRooms;
 
-    // TODO rimuovere???
     public Room(String name) {
         this.name = name;
     }
