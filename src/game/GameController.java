@@ -3,14 +3,27 @@ package game;
 import game.console.InputController;
 import game.domain.Item;
 import game.domain.Player;
+import game.utils.ItemFactory;
 import map.domain.Room;
 import map.utils.Direction;
 import map.utils.RoomFactory;
 
 import java.util.Optional;
+import java.util.Random;
 
 public class GameController {
+    private static GameController instance = null;
     private static final String INVALID_INPUT_STRING = "Invalid input";
+
+    private GameController() {
+    }
+
+    public static GameController getInstance() {
+        if (instance == null) {
+            instance = new GameController();
+        }
+        return instance;
+    }
 
     public void runGame() {
         Room currentRoom = RoomFactory.getInstance().createRandomRoom();
