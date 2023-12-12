@@ -19,14 +19,14 @@ public class GameController {
     private Player player;
     private boolean gameEnded;
 
-    private GameController(){
+    private GameController() {
         this.currentRoom = RoomFactory.getInstance().createRoomTree(DEFAULT_ROOM_TREE_DEPTH);
         this.player = new Player();
         this.gameEnded = false;
     }
 
-    public static GameController getInstance(){
-        if (instance == null){
+    public static GameController getInstance() {
+        if (instance == null) {
             instance = new GameController();
         }
         return instance;
@@ -44,18 +44,14 @@ public class GameController {
 
             if (parts.length > 2) {
                 System.out.println(INVALID_INPUT_STRING);
-            }
-
-            else if (parts.length > 0) {
+            } else if (parts.length > 0) {
                 try {
                     EnumCommand command = EnumCommand.valueOf(parts[0].toUpperCase());
                     command.execute(parts);
                 } catch (IllegalArgumentException exception) {
                     System.out.println(INVALID_INPUT_STRING);
                 }
-            }
-
-            else {
+            } else {
                 System.out.println(INVALID_INPUT_STRING);
             }
         }

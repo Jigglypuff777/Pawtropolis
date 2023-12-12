@@ -16,6 +16,7 @@ public class Room {
     public Room(String name) {
         this.name = name;
     }
+
     public Room(String name, Set<Item> items, Set<Animal> animals, Map<Direction, Room> adjacentRooms) {
         this.name = name;
         this.items = items;

@@ -7,7 +7,7 @@ import map.utils.Direction;
 
 import java.util.Optional;
 
-public enum EnumCommand implements Command{
+public enum EnumCommand implements Command {
     GO {
         @Override
         public void execute(String[] parts) {
@@ -39,10 +39,10 @@ public enum EnumCommand implements Command{
             System.out.println("The " + direction.toString().toLowerCase() + " room doesn't exist.");
         }
     },
-    GET{
+    GET {
         @Override
         public void execute(String[] parts) {
-            if (parts.length != 2){
+            if (parts.length != 2) {
                 System.out.println("You need to choose an item to get");
                 return;
             }
@@ -69,7 +69,7 @@ public enum EnumCommand implements Command{
 
         }
     },
-    DROP{
+    DROP {
         @Override
         public void execute(String[] parts) {
             if (parts.length != 2) {
@@ -92,19 +92,19 @@ public enum EnumCommand implements Command{
             gameController.getPlayer().getBag().setFilledSlots(gameController.getPlayer().getBag().getFilledSlots() - item.getRequiredSlots());
         }
     },
-    LOOK{
+    LOOK {
         @Override
         public void execute(String[] parts) {
             System.out.println(gameController.getCurrentRoom().toString());
         }
     },
-    BAG{
+    BAG {
         @Override
         public void execute(String[] parts) {
             System.out.println(gameController.getPlayer().getBag().toString());
         }
     },
-    EXIT{
+    EXIT {
         @Override
         public void execute(String[] parts) {
             gameController.setGameEnded(true);

@@ -25,14 +25,14 @@ public class RoomFactory {
 
 
     // prima stanza: connessioni con altre stanze ma non connessione con la precedente
-        // solo availabel
+    // solo availabel
 
     // tutti i livelli: connessione con altre stanze e con precedente
-        // sia getOpposite + sia available direction
+    // sia getOpposite + sia available direction
 
     // ultimo livello: connessione NON con altre stance ma con precedente
-        // if depth == 0
-        // getOpposite
+    // if depth == 0
+    // getOpposite
 
     public Room createRoomTree(int depth) {
         Set<Animal> animals = AnimalFactory.getInstance().getRandomAnimalsSet(3);
@@ -45,7 +45,7 @@ public class RoomFactory {
         for (int i = 0; i < availableDirectionsNumber; i++) {
             int randomDirectionIndex = random.nextInt(availableDirectionsList.size());
             Direction newDirection = availableDirectionsList.remove(randomDirectionIndex);
-            newRoom.getAdjacentRooms().putIfAbsent(newDirection, helperCreateRoomTree(newRoom, newDirection, depth-1));
+            newRoom.getAdjacentRooms().putIfAbsent(newDirection, helperCreateRoomTree(newRoom, newDirection, depth - 1));
         }
         return newRoom;
     }
@@ -64,7 +64,7 @@ public class RoomFactory {
         for (int i = 0; i < availableDirectionsNumber; i++) {
             int randomDirectionIndex = random.nextInt(availableDirectionsList.size());
             Direction newDirection = availableDirectionsList.remove(randomDirectionIndex);
-            newRoom.getAdjacentRooms().putIfAbsent(newDirection, helperCreateRoomTree(newRoom, newDirection, depth-1));
+            newRoom.getAdjacentRooms().putIfAbsent(newDirection, helperCreateRoomTree(newRoom, newDirection, depth - 1));
         }
         return newRoom;
     }
