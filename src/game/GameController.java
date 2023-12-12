@@ -14,7 +14,7 @@ import java.util.Random;
 public class GameController {
     private static GameController instance = null;
     private static final String INVALID_INPUT_STRING = "Invalid input";
-
+    private static final int DEFAULT_ROOM_TREE_DEPTH = 3;
     private GameController() {
     }
 
@@ -26,7 +26,7 @@ public class GameController {
     }
 
     public void runGame() {
-        Room currentRoom = RoomFactory.getInstance().createRandomRoom();
+        Room currentRoom = RoomFactory.getInstance().createRoomTree(DEFAULT_ROOM_TREE_DEPTH);
         boolean gameEnded = false;
         String input;
 
@@ -90,14 +90,7 @@ public class GameController {
         }
 
         // ora check se la stanza ha la porta richiesta
-        if (currentRoom.getAdjacentRooms().containsKey(direction)) {
-
-            //controllo se oltre la porta ci sia gia una stanza creata
-            if (currentRoom.getAdjacentRooms().get(direction) == null) {
-                //colleghiamo le due stanze, creando la nuova e legandole con una porta comune e inversa
-                currentRoom.getAdjacentRooms().put(direction, RoomFactory.getInstance().createRandomRoom(currentRoom, direction));
-            }
-
+        if (currentRoom.getAdjacentRooms().get(direction) != null) {
             // prendiamo la nuova stanza
             Room newCurrentRoom = currentRoom.getAdjacentRooms().get(direction);
 

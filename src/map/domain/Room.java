@@ -17,6 +17,13 @@ public class Room {
         this.name = name;
     }
 
+    public Room(String name, Set<Item> items, Set<Animal> animals, Map<Direction, Room> adjacentRooms) {
+        this.name = name;
+        this.items = items;
+        this.animals = animals;
+        this.adjacentRooms = adjacentRooms;
+    }
+
     public String getName() {
         return name;
     }
