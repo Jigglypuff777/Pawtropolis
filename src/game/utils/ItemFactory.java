@@ -6,9 +6,9 @@ import java.util.*;
 
 public class ItemFactory {
     private static ItemFactory instance = null;
-    private final Random random;
+    private static final Random random = new Random();
     private final Map<String, Integer> itemsMap = Map.of(
-            "Coltello",1,
+            "Coltello", 1,
             "Katana", 2,
             "Pistola", 3,
             "Bazooka", 4,
@@ -18,10 +18,9 @@ public class ItemFactory {
             "Ultraball", 7,
             "Pozione", 4,
             "Antidoto", 4
-            );
+    );
 
     private ItemFactory() {
-        random = new Random();
     }
 
     public static ItemFactory getInstance() {
