@@ -10,10 +10,11 @@ import java.util.*;
 
 public class RoomFactory {
     private static RoomFactory instance = null;
-    private final Random random;
+    private static final Random random = new Random();
+    private static final int DEFAULT_ROOM_ANIMALS_QUANTITY = 3;
+    private static final int DEFAULT_ROOM_ITEMS_QUANTITY = 5;
 
     private RoomFactory() {
-        random = new Random();
     }
 
     public static RoomFactory getInstance() {
@@ -23,49 +24,29 @@ public class RoomFactory {
         return instance;
     }
 
-
-    // prima stanza: connessioni con altre stanze ma non connessione con la precedente
-    // solo availabel
-
-    // tutti i livelli: connessione con altre stanze e con precedente
-    // sia getOpposite + sia available direction
-
-    // ultimo livello: connessione NON con altre stance ma con precedente
-    // if depth == 0
-    // getOpposite
-
     public Room createRoomTree(int depth) {
-        Set<Animal> animals = AnimalFactory.getInstance().getRandomAnimalsSet(3);
-        Set<Item> items = ItemFactory.getInstance().getRandomItemsSet(5);
+        String name = "Room" + random.nextInt(100);
+        Set<Item> items = ItemFactory.getInstance().getRandomItemsSet(DEFAULT_ROOM_ITEMS_QUANTITY);
+        Set<Animal> animals = AnimalFactory.getInstance().getRandomAnimalsSet(DEFAULT_ROOM_ANIMALS_QUANTITY);
         Map<Direction, Room> adjacentRooms = new EnumMap<>(Direction.class);
-        Room newRoom = new Room("Room" + random.nextInt(100), items, animals, adjacentRooms);
+        Room newRoom = new Room(name, items, animals, adjacentRooms);
 
-        List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));
-        int availableDirectionsNumber = random.nextInt(1, availableDirectionsList.size() + 1);
-        for (int i = 0; i < availableDirectionsNumber; i++) {
-            int randomDirectionIndex = random.nextInt(availableDirectionsList.size());
-            Direction newDirection = availableDirectionsList.remove(randomDirectionIndex);
-            newRoom.getAdjacentRooms().putIfAbsent(newDirection, helperCreateRoomTree(newRoom, newDirection, depth - 1));
-        }
-        return newRoom;
-    }
-
-    public Room helperCreateRoomTree(Room linkedRoom, Direction linkedDirection, int depth) {
-        Set<Animal> animals = AnimalFactory.getInstance().getRandomAnimalsSet(3);
-        Set<Item> items = ItemFactory.getInstance().getRandomItemsSet(5);
-        Map<Direction, Room> adjacentRooms = new EnumMap<>(Direction.class);
-        adjacentRooms.put(Direction.getOppositeDirection(linkedDirection), linkedRoom);
-        Room newRoom = new Room("Room" + random.nextInt(100), items, animals, adjacentRooms);
         if (depth == 0) {
             return newRoom;
         }
+
         List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));
         int availableDirectionsNumber = random.nextInt(1, availableDirectionsList.size() + 1);
+
         for (int i = 0; i < availableDirectionsNumber; i++) {
             int randomDirectionIndex = random.nextInt(availableDirectionsList.size());
             Direction newDirection = availableDirectionsList.remove(randomDirectionIndex);
-            newRoom.getAdjacentRooms().putIfAbsent(newDirection, helperCreateRoomTree(newRoom, newDirection, depth - 1));
+
+            Room linkedRoom = createRoomTree(depth - 1);
+            newRoom.getAdjacentRooms().put(newDirection, linkedRoom);
+            linkedRoom.getAdjacentRooms().put(Direction.getOppositeDirection(newDirection), newRoom);
         }
+
         return newRoom;
     }
 
