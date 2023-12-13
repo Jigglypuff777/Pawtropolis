@@ -33,7 +33,7 @@ public class RoomFactory {
 
         if (depth == 0) {
             return newRoom;
-
+        }
 
         List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));
         int availableDirectionsNumber = random.nextInt(2, availableDirectionsList.size() + 1);

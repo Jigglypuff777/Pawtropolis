@@ -32,9 +32,6 @@ public class GameController {
 
     public void runGame() {
 
-        Room currentRoom = RoomFactory.getInstance().createRoomTree(DEFAULT_ROOM_TREE_DEPTH);
-        boolean gameEnded = false;
-
         String input;
 
         while (!isGameEnded()) {
