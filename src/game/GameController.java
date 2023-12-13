@@ -4,8 +4,10 @@ import game.command.Command;
 import game.command.EnumCommand;
 import game.console.InputController;
 import game.domain.Player;
+import game.utils.ItemFactory;
 import map.domain.Room;
 import map.utils.RoomFactory;
+
 
 public class GameController {
     private static GameController instance = null;
@@ -29,6 +31,10 @@ public class GameController {
     }
 
     public void runGame() {
+
+        Room currentRoom = RoomFactory.getInstance().createRoomTree(DEFAULT_ROOM_TREE_DEPTH);
+        boolean gameEnded = false;
+
         String input;
 
         while (!isGameEnded()) {
@@ -61,8 +67,10 @@ public class GameController {
         this.currentRoom = currentRoom;
     }
 
+
     public Player getPlayer() {
         return player;
+
     }
 
     public void setPlayer(Player player) {
