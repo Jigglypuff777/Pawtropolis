@@ -1,5 +1,5 @@
 package game.command;
 
 public interface Command {
-    public void execute(String[] parts);
+    public void execute(String[] splitInput);
 }

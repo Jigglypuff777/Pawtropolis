@@ -10,16 +10,17 @@ import java.util.Optional;
 public enum EnumCommand implements Command {
     GO {
         @Override
-        public void execute(String[] parts) {
-            if (parts.length != 2) {
+        public void execute(String[] splitInput) {
+            if (splitInput.length != 2) {
                 System.out.println("You need to declare the direction");
                 return;
             }
+
             Direction direction;
 
             try {
-                direction = Direction.valueOf(parts[1].toUpperCase());
-            } catch (IllegalArgumentException exception) {
+                direction = Direction.valueOf(splitInput[1].toUpperCase());
+            } catch (IllegalArgumentException e) {
                 System.out.println("Direction not valid");
                 return;
             }
@@ -41,14 +42,14 @@ public enum EnumCommand implements Command {
     },
     GET {
         @Override
-        public void execute(String[] parts) {
-            if (parts.length != 2) {
+        public void execute(String[] splitInput) {
+            if (splitInput.length != 2) {
                 System.out.println("You need to choose an item to get");
                 return;
             }
 
             Optional<Item> optionalItem = gameController.getCurrentRoom().getItems().stream()
-                    .filter(i -> i.getName().equalsIgnoreCase(parts[1]))
+                    .filter(i -> i.getName().equalsIgnoreCase(splitInput[1]))
                     .findFirst();
 
             if (optionalItem.isEmpty()) {
@@ -71,13 +72,13 @@ public enum EnumCommand implements Command {
     },
     DROP {
         @Override
-        public void execute(String[] parts) {
-            if (parts.length != 2) {
+        public void execute(String[] splitInput) {
+            if (splitInput.length != 2) {
                 System.out.println("You need to choose an item to drop");
                 return;
             }
             Optional<Item> optionalItem = gameController.getPlayer().getBag().getItemList().stream()
-                    .filter(i -> i.getName().equalsIgnoreCase(parts[1]))
+                    .filter(i -> i.getName().equalsIgnoreCase(splitInput[1]))
                     .findFirst();
 
             if (optionalItem.isEmpty()) {
@@ -94,19 +95,19 @@ public enum EnumCommand implements Command {
     },
     LOOK {
         @Override
-        public void execute(String[] parts) {
+        public void execute(String[] splitInput) {
             System.out.println(gameController.getCurrentRoom().toString());
         }
     },
     BAG {
         @Override
-        public void execute(String[] parts) {
+        public void execute(String[] splitInput) {
             System.out.println(gameController.getPlayer().getBag().toString());
         }
     },
     EXIT {
         @Override
-        public void execute(String[] parts) {
+        public void execute(String[] splitInput) {
             gameController.setGameEnded(true);
         }
     };

@@ -3,18 +3,14 @@ package game;
 import game.command.Command;
 import game.command.EnumCommand;
 import game.console.InputController;
-import game.domain.Item;
 import game.domain.Player;
 import map.domain.Room;
-import map.utils.Direction;
 import map.utils.RoomFactory;
 
-import java.util.Optional;
-
 public class GameController {
+    private static GameController instance = null;
     private static final String INVALID_INPUT_STRING = "Invalid input";
     private static final int DEFAULT_ROOM_TREE_DEPTH = 3;
-    private static GameController instance = null;
     private Room currentRoom;
     private Player player;
     private boolean gameEnded;
@@ -35,20 +31,20 @@ public class GameController {
     public void runGame() {
         String input;
 
-        while (!gameEnded) {
+        while (!isGameEnded()) {
             System.out.println("What do you wanna do?");
             System.out.print(">");
             input = InputController.readString();
 
-            String[] parts = input.trim().split("\\s+");
+            String[] splitInput = input.trim().split("\\s+");
 
-            if (parts.length > 2) {
+            if (splitInput.length > 2) {
                 System.out.println(INVALID_INPUT_STRING);
-            } else if (parts.length > 0) {
+            } else if (splitInput.length > 0) {
                 try {
-                    EnumCommand command = EnumCommand.valueOf(parts[0].toUpperCase());
-                    command.execute(parts);
-                } catch (IllegalArgumentException exception) {
+                    Command command = EnumCommand.valueOf(splitInput[0].toUpperCase());
+                    command.execute(splitInput);
+                } catch (IllegalArgumentException e) {
                     System.out.println(INVALID_INPUT_STRING);
                 }
             } else {

@@ -6,11 +6,6 @@ public enum Direction {
     EAST,
     WEST;
 
-    // TODO rimuovere??
-    Direction() {
-
-    }
-
     public static Direction getOppositeDirection(Direction direction) {
         return switch (direction) {
             case NORTH -> SOUTH;

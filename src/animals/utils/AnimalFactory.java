@@ -10,12 +10,11 @@ import java.util.*;
 
 public class AnimalFactory {
     private static AnimalFactory instance = null;
-    private final Random random;
+    private static final Random random = new Random();
     private final List<String> nameList = new ArrayList<>(Arrays.asList("Fuffi", "Spot", "Gwaihir", "Shaggy", "Ciccio"));
     private final List<String> foodList = new ArrayList<>(Arrays.asList("Meat", "Fruit", "Steak", "Caccole", "Fish"));
 
     private AnimalFactory() {
-        random = new Random();
     }
 
     public static AnimalFactory getInstance() {
@@ -25,7 +24,7 @@ public class AnimalFactory {
         return instance;
     }
 
-    public Animal getRandomAnimal(){
+    public Animal getRandomAnimal() {
         return switch (random.nextInt(3)) {
             case 0 -> new Eagle(nameList.get(random.nextInt(nameList.size())),
                     foodList.get(random.nextInt(foodList.size())),
@@ -34,7 +33,7 @@ public class AnimalFactory {
                     random.nextDouble(8),
                     random.nextInt(102),
                     random.nextDouble(61.4)
-                    );
+            );
             case 1 -> new Lion(nameList.get(random.nextInt(nameList.size())),
                     foodList.get(random.nextInt(foodList.size())),
                     random.nextInt(15),
