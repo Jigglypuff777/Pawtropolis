@@ -21,7 +21,7 @@ public enum EnumCommand implements Command {
             try {
                 direction = Direction.valueOf(splitInput[1].toUpperCase());
             } catch (IllegalArgumentException e) {
-                System.out.println("Direction not valid");
+                System.out.println("Invalid direction");
                 return;
             }
 
@@ -96,12 +96,20 @@ public enum EnumCommand implements Command {
     LOOK {
         @Override
         public void execute(String[] splitInput) {
+            if (splitInput.length > 1) {
+                System.out.println("Invalid input");
+                return;
+            }
             System.out.println(gameController.getCurrentRoom().toString());
         }
     },
     BAG {
         @Override
         public void execute(String[] splitInput) {
+            if (splitInput.length > 1) {
+                System.out.println("Invalid input");
+                return;
+            }
             System.out.println(gameController.getPlayer().getBag().toString());
         }
     },

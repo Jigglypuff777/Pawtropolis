@@ -24,7 +24,7 @@ public class RoomFactory {
         return instance;
     }
 
-    public Room createRoomTree(int depth) {
+    public Room generateGameMap(int depth) {
         String name = "Room" + random.nextInt(100);
         Set<Item> items = ItemFactory.getInstance().getRandomItemsSet(DEFAULT_ROOM_ITEMS_QUANTITY);
         Set<Animal> animals = AnimalFactory.getInstance().getRandomAnimalsSet(DEFAULT_ROOM_ANIMALS_QUANTITY);
@@ -36,13 +36,13 @@ public class RoomFactory {
         }
 
         List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));
-        int availableDirectionsNumber = random.nextInt(1, availableDirectionsList.size() + 1);
+        int availableDirectionsNumber = random.nextInt(2, availableDirectionsList.size() + 1);
 
         for (int i = 0; i < availableDirectionsNumber; i++) {
             int randomDirectionIndex = random.nextInt(availableDirectionsList.size());
             Direction newDirection = availableDirectionsList.remove(randomDirectionIndex);
 
-            Room linkedRoom = createRoomTree(depth - 1);
+            Room linkedRoom = generateGameMap(depth - 1);
             newRoom.getAdjacentRooms().put(newDirection, linkedRoom);
             linkedRoom.getAdjacentRooms().put(Direction.getOppositeDirection(newDirection), newRoom);
         }

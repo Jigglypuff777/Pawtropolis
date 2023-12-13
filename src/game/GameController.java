@@ -10,13 +10,13 @@ import map.utils.RoomFactory;
 public class GameController {
     private static GameController instance = null;
     private static final String INVALID_INPUT_STRING = "Invalid input";
-    private static final int DEFAULT_ROOM_TREE_DEPTH = 3;
+    private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     private Room currentRoom;
     private Player player;
     private boolean gameEnded;
 
     private GameController() {
-        this.currentRoom = RoomFactory.getInstance().createRoomTree(DEFAULT_ROOM_TREE_DEPTH);
+        this.currentRoom = RoomFactory.getInstance().generateGameMap(DEFAULT_MAP_RECURSION_DEPTH);
         this.player = new Player();
         this.gameEnded = false;
     }
@@ -38,18 +38,18 @@ public class GameController {
 
             String[] splitInput = input.trim().split("\\s+");
 
-            if (splitInput.length > 2) {
+            if (splitInput.length > 2 || splitInput.length == 0) {
                 System.out.println(INVALID_INPUT_STRING);
-            } else if (splitInput.length > 0) {
-                try {
-                    Command command = EnumCommand.valueOf(splitInput[0].toUpperCase());
-                    command.execute(splitInput);
-                } catch (IllegalArgumentException e) {
-                    System.out.println(INVALID_INPUT_STRING);
-                }
-            } else {
+                continue;
+            }
+
+            try {
+                Command command = EnumCommand.valueOf(splitInput[0].toUpperCase());
+                command.execute(splitInput);
+            } catch (IllegalArgumentException e) {
                 System.out.println(INVALID_INPUT_STRING);
             }
+
         }
     }
 
