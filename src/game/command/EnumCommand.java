@@ -2,6 +2,7 @@ package game.command;
 
 import game.GameController;
 import game.domain.Item;
+import game.domain.Player;
 import map.domain.Room;
 import map.utils.Direction;
 
@@ -40,8 +41,9 @@ public enum EnumCommand implements Command {
                 System.out.println("You need to choose an item to get");
                 return;
             }
+            Room currentRoom = gameController.getCurrentRoom();
 
-            Optional<Item> optionalItem = gameController.getCurrentRoom().getItems().stream()
+            Optional<Item> optionalItem = currentRoom.getItems().stream()
                     .filter(i -> i.getName().equalsIgnoreCase(splitInput[1]))
                     .findFirst();
 
@@ -50,16 +52,17 @@ public enum EnumCommand implements Command {
                 return;
             }
 
+            Player player = gameController.getPlayer();
             Item item = optionalItem.get();
-            if ((item.getRequiredSlots() > gameController.getPlayer().getAvailableSlots())) {
+            if ((item.getRequiredSlots() > player.getAvailableSlots())) {
                 System.out.println("You don't have enough slots");
                 return;
             }
 
-            gameController.getPlayer().getItem(item);
-            gameController.getCurrentRoom().removePickedItem(item);
-            int newAvailableSlots = gameController.getPlayer().getAvailableSlots() - item.getRequiredSlots();
-            gameController.getPlayer().updateAvailableSlots(newAvailableSlots);
+            player.getItem(item);
+            currentRoom.removePickedItem(item);
+            int newAvailableSlots = player.getAvailableSlots() - item.getRequiredSlots();
+            player.updateAvailableSlots(newAvailableSlots);
         }
     },
     DROP {
@@ -70,7 +73,8 @@ public enum EnumCommand implements Command {
                 return;
             }
 
-            Optional<Item> optionalItem = gameController.getPlayer().getCollectedItems().stream()
+            Player player = gameController.getPlayer();
+            Optional<Item> optionalItem = player.getCollectedItems().stream()
                     .filter(i -> i.getName().equalsIgnoreCase(splitInput[1]))
                     .findFirst();
             if (optionalItem.isEmpty()) {
@@ -78,11 +82,12 @@ public enum EnumCommand implements Command {
                 return;
             }
 
+            Room currentRoom = gameController.getCurrentRoom();
             Item item = optionalItem.get();
-            gameController.getPlayer().dropItem(item);
-            gameController.getCurrentRoom().receiveDroppedItem(item);
-            int newAvailableSlots = gameController.getPlayer().getAvailableSlots() + item.getRequiredSlots();
-            gameController.getPlayer().updateAvailableSlots(newAvailableSlots);
+            player.dropItem(item);
+            currentRoom.receiveDroppedItem(item);
+            int newAvailableSlots = player.getAvailableSlots() + item.getRequiredSlots();
+            player.updateAvailableSlots(newAvailableSlots);
         }
     },
     LOOK {

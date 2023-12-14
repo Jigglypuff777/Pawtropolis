@@ -12,13 +12,10 @@ public class GameController {
     private static GameController instance = null;
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     private Room currentRoom;
-    private final Player player;
+    private Player player;
     private boolean gameEnded;
 
     private GameController() {
-        this.currentRoom = RoomFactory.getInstance().generateGameMap(DEFAULT_MAP_RECURSION_DEPTH);
-        this.player = new Player();
-        this.gameEnded = false;
     }
 
     public static GameController getInstance() {
@@ -29,7 +26,9 @@ public class GameController {
     }
 
     public void runGame() {
-
+        currentRoom = RoomFactory.getInstance().generateGameMap(DEFAULT_MAP_RECURSION_DEPTH);
+        player = new Player();
+        gameEnded = false;
         String input;
 
         while (!isGameEnded()) {
