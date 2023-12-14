@@ -35,20 +35,18 @@ public class RoomFactory {
             return newRoom;
         }
 
-        List<Direction> availableDirectionsList = new ArrayList<>(Arrays.asList(Direction.values()));
-        int availableDirectionsNumber = random.nextInt(2, availableDirectionsList.size() + 1);
+        List<Direction> availableDirections = new ArrayList<>(Arrays.asList(Direction.values()));
+        int randomAdjacentRoomNumber = random.nextInt(2, availableDirections.size() + 1);
 
-        for (int i = 0; i < availableDirectionsNumber; i++) {
-            int randomDirectionIndex = random.nextInt(availableDirectionsList.size());
-            Direction newDirection = availableDirectionsList.remove(randomDirectionIndex);
+        for (int i = 0; i < randomAdjacentRoomNumber; i++) {
+            int randomIndex = random.nextInt(availableDirections.size());
+            Direction newDirection = availableDirections.remove(randomIndex);
 
             Room linkedRoom = generateGameMap(depth - 1);
-            newRoom.getAdjacentRooms().put(newDirection, linkedRoom);
-            linkedRoom.getAdjacentRooms().put(Direction.getOppositeDirection(newDirection), newRoom);
+            newRoom.putAdjacentRoom(newDirection, linkedRoom);
+            linkedRoom.putAdjacentRoom(Direction.getOppositeDirection(newDirection), newRoom);
         }
 
         return newRoom;
     }
-
-
 }

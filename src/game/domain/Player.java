@@ -1,10 +1,12 @@
 package game.domain;
 
+import java.util.List;
+
 public class Player {
-    private String name;
-    private final int lifePoints;
     private static final int DEFAULT_LIFE_POINTS = 20;
     private static final String DEFAULT_NAME = "Player One";
+    private String name;
+    private int lifePoints;
     private final Bag bag;
 
     public Player(String name){
@@ -30,8 +32,32 @@ public class Player {
         return lifePoints;
     }
 
+    public void setLifePoints(int lifePoints) {
+        this.lifePoints = lifePoints;
+    }
+
     public Bag getBag() {
         return bag;
+    }
+
+    public int getAvailableSlots(){
+        return bag.getTotalSlots() - bag.getFilledSlots();
+    }
+
+    public void updateAvailableSlots(int newAvailableSlots) {
+        bag.setFilledSlots(newAvailableSlots);
+    }
+
+    public void getItem(Item item) {
+        bag.getItem(item);
+    }
+
+    public void dropItem(Item item) {
+        bag.dropItem(item);
+    }
+
+    public List<Item> getCollectedItems() {
+        return bag.getItemList();
     }
 
 }

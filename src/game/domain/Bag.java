@@ -30,6 +30,12 @@ public class Bag {
         this.filledSlots = filledSlots;
     }
 
+    public void getItem(Item item) {
+        itemList.add(item);
+    }
+    public void dropItem(Item item) {
+        itemList.remove(item);
+    }
     @Override
     public String toString() {
         return this.getItemList().stream()

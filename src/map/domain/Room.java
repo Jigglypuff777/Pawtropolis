@@ -8,14 +8,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Room {
-    private String name;
-    private Set<Item> items;
-    private Set<Animal> animals;
-    private Map<Direction, Room> adjacentRooms;
-
-    public Room(String name) {
-        this.name = name;
-    }
+    private final String name;
+    private final Set<Item> items;
+    private final Set<Animal> animals;
+    private final Map<Direction, Room> adjacentRooms;
 
     public Room(String name, Set<Item> items, Set<Animal> animals, Map<Direction, Room> adjacentRooms) {
         this.name = name;
@@ -28,32 +24,32 @@ public class Room {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Set<Item> getItems() {
         return items;
-    }
-
-    public void setItems(Set<Item> items) {
-        this.items = items;
     }
 
     public Set<Animal> getAnimals() {
         return animals;
     }
 
-    public void setAnimals(Set<Animal> animals) {
-        this.animals = animals;
-    }
-
     public Map<Direction, Room> getAdjacentRooms() {
         return adjacentRooms;
     }
 
-    public void setAdjacentRooms(Map<Direction, Room> adjacentRooms) {
-        this.adjacentRooms = adjacentRooms;
+    public Room getAdjacentRoomByDirection(Direction direction) {
+        return adjacentRooms.get(direction);
+    }
+
+    public void putAdjacentRoom(Direction linkedDirection, Room linkedRoom) {
+        adjacentRooms.put(linkedDirection, linkedRoom);
+    }
+
+    public void removePickedItem(Item item) {
+        items.remove(item);
+    }
+
+    public void receiveDroppedItem(Item item) {
+        items.add(item);
     }
 
     @Override

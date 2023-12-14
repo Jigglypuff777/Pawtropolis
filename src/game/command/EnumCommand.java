@@ -17,7 +17,6 @@ public enum EnumCommand implements Command {
             }
 
             Direction direction;
-
             try {
                 direction = Direction.valueOf(splitInput[1].toUpperCase());
             } catch (IllegalArgumentException e) {
@@ -25,18 +24,12 @@ public enum EnumCommand implements Command {
                 return;
             }
 
-
-            if (gameController.getCurrentRoom().getAdjacentRooms().get(direction) != null) {
-
-                Room newCurrentRoom = gameController.getCurrentRoom().getAdjacentRooms().get(direction);
-
-                System.out.println(newCurrentRoom.toString());
-
-                gameController.setCurrentRoom(newCurrentRoom);
-
+            Room destinationRoom = gameController.getCurrentRoom().getAdjacentRoomByDirection(direction);
+            if (destinationRoom != null) {
+                System.out.println(destinationRoom);
+                gameController.setCurrentRoom(destinationRoom);
                 return;
             }
-
             System.out.println("The " + direction.toString().toLowerCase() + " room doesn't exist.");
         }
     },
@@ -58,16 +51,15 @@ public enum EnumCommand implements Command {
             }
 
             Item item = optionalItem.get();
-
-            if ((item.getRequiredSlots() + gameController.getPlayer().getBag().getFilledSlots()) > gameController.getPlayer().getBag().getTotalSlots()) {
+            if ((item.getRequiredSlots() > gameController.getPlayer().getAvailableSlots())) {
                 System.out.println("You don't have enough slots");
                 return;
             }
 
-            gameController.getPlayer().getBag().getItemList().add(item);
-            gameController.getCurrentRoom().getItems().remove(item);
-            gameController.getPlayer().getBag().setFilledSlots(gameController.getPlayer().getBag().getFilledSlots() + item.getRequiredSlots());
-
+            gameController.getPlayer().getItem(item);
+            gameController.getCurrentRoom().removePickedItem(item);
+            int newAvailableSlots = gameController.getPlayer().getAvailableSlots() - item.getRequiredSlots();
+            gameController.getPlayer().updateAvailableSlots(newAvailableSlots);
         }
     },
     DROP {
@@ -77,20 +69,20 @@ public enum EnumCommand implements Command {
                 System.out.println("You need to choose an item to drop");
                 return;
             }
-            Optional<Item> optionalItem = gameController.getPlayer().getBag().getItemList().stream()
+
+            Optional<Item> optionalItem = gameController.getPlayer().getCollectedItems().stream()
                     .filter(i -> i.getName().equalsIgnoreCase(splitInput[1]))
                     .findFirst();
-
             if (optionalItem.isEmpty()) {
                 System.out.println("The selected item is not in the bag");
                 return;
             }
 
             Item item = optionalItem.get();
-
-            gameController.getCurrentRoom().getItems().add(item);
-            gameController.getPlayer().getBag().getItemList().remove(item);
-            gameController.getPlayer().getBag().setFilledSlots(gameController.getPlayer().getBag().getFilledSlots() - item.getRequiredSlots());
+            gameController.getPlayer().dropItem(item);
+            gameController.getCurrentRoom().receiveDroppedItem(item);
+            int newAvailableSlots = gameController.getPlayer().getAvailableSlots() + item.getRequiredSlots();
+            gameController.getPlayer().updateAvailableSlots(newAvailableSlots);
         }
     },
     LOOK {
@@ -100,7 +92,7 @@ public enum EnumCommand implements Command {
                 System.out.println("Invalid input");
                 return;
             }
-            System.out.println(gameController.getCurrentRoom().toString());
+            System.out.println(gameController.getCurrentRoom());
         }
     },
     BAG {
@@ -110,7 +102,7 @@ public enum EnumCommand implements Command {
                 System.out.println("Invalid input");
                 return;
             }
-            System.out.println(gameController.getPlayer().getBag().toString());
+            System.out.println(gameController.getPlayer().getBag());
         }
     },
     EXIT {
