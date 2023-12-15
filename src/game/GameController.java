@@ -7,6 +7,8 @@ import game.domain.Player;
 import map.domain.Room;
 import map.utils.RoomFactory;
 
+import java.util.NoSuchElementException;
+
 
 public class GameController {
     private static GameController instance = null;
@@ -48,9 +50,9 @@ public class GameController {
             }
 
             try {
-                Command command = EnumCommand.valueOf(splitInput[0].toUpperCase());
+                Command command = EnumCommand.getCommandByString(splitInput[0].toLowerCase());
                 command.execute(splitInput);
-            } catch (IllegalArgumentException e) {
+            } catch (NoSuchElementException e) {
                 System.out.println("Invalid command");
             }
 
