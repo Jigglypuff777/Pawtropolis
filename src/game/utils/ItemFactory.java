@@ -8,16 +8,16 @@ public class ItemFactory {
     private static ItemFactory instance = null;
     private static final Random random = new Random();
     private final Map<String, Integer> itemsMap = Map.of(
-            "Coltello", 1,
+            "Knife", 1,
             "Katana", 2,
-            "Pistola", 3,
+            "Gun", 3,
             "Bazooka", 4,
             "Pokédex", 5,
             "Pokéball", 5,
             "Masterball", 10,
             "Ultraball", 7,
-            "Pozione", 4,
-            "Antidoto", 4
+            "Potion", 4,
+            "Antidote", 4
     );
 
     private ItemFactory() {

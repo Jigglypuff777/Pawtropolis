@@ -6,10 +6,12 @@ import game.domain.Player;
 import map.domain.Room;
 import map.utils.Direction;
 
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public enum EnumCommand implements Command {
-    GO {
+    GO("go") {
         @Override
         public void execute(String[] splitInput) {
             if (splitInput.length != 2) {
@@ -19,8 +21,8 @@ public enum EnumCommand implements Command {
 
             Direction direction;
             try {
-                direction = Direction.valueOf(splitInput[1].toUpperCase());
-            } catch (IllegalArgumentException e) {
+                direction = Direction.getDirectionByString(splitInput[1].toLowerCase());
+            } catch (NoSuchElementException e) {
                 System.out.println("Invalid direction");
                 return;
             }
@@ -34,7 +36,7 @@ public enum EnumCommand implements Command {
             System.out.println("The " + direction.toString().toLowerCase() + " room doesn't exist.");
         }
     },
-    GET {
+    GET("get") {
         @Override
         public void execute(String[] splitInput) {
             if (splitInput.length != 2) {
@@ -54,7 +56,7 @@ public enum EnumCommand implements Command {
 
             Player player = gameController.getPlayer();
             Item item = optionalItem.get();
-            if ((item.getRequiredSlots() > player.getAvailableSlots())) {
+            if (item.getRequiredSlots() > player.getAvailableSlots()) {
                 System.out.println("You don't have enough slots");
                 return;
             }
@@ -65,7 +67,7 @@ public enum EnumCommand implements Command {
             player.updateAvailableSlots(newAvailableSlots);
         }
     },
-    DROP {
+    DROP("drop") {
         @Override
         public void execute(String[] splitInput) {
             if (splitInput.length != 2) {
@@ -90,7 +92,7 @@ public enum EnumCommand implements Command {
             player.updateAvailableSlots(newAvailableSlots);
         }
     },
-    LOOK {
+    LOOK("look") {
         @Override
         public void execute(String[] splitInput) {
             if (splitInput.length > 1) {
@@ -100,7 +102,7 @@ public enum EnumCommand implements Command {
             System.out.println(gameController.getCurrentRoom());
         }
     },
-    BAG {
+    BAG("bag") {
         @Override
         public void execute(String[] splitInput) {
             if (splitInput.length > 1) {
@@ -110,12 +112,24 @@ public enum EnumCommand implements Command {
             System.out.println(gameController.getPlayer().getBag());
         }
     },
-    EXIT {
+    EXIT("exit") {
         @Override
         public void execute(String[] splitInput) {
             gameController.setGameEnded(true);
         }
     };
 
-    private static GameController gameController = GameController.getInstance();
+    private static final GameController gameController = GameController.getInstance();
+    private final String label;
+
+    EnumCommand(String label) {
+        this.label = label;
+    }
+
+    public static Command getCommandByString(String string) {
+        return Arrays.stream(EnumCommand.values())
+                .filter(command -> command.label.equals(string))
+                .findFirst()
+                .orElseThrow();
+    }
 }

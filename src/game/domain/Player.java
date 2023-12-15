@@ -35,11 +35,11 @@ public class Player {
     }
 
     public int getAvailableSlots(){
-        return bag.getTotalSlots() - bag.getFilledSlots();
+        return bag.getAvailableSlots();
     }
 
     public void updateAvailableSlots(int newAvailableSlots) {
-        bag.setFilledSlots(newAvailableSlots);
+        bag.setAvailableSlots(newAvailableSlots);
     }
 
     public void getItem(Item item) {
