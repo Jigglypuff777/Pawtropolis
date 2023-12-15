@@ -4,18 +4,12 @@ import java.util.List;
 
 public class Player {
     private static final int DEFAULT_LIFE_POINTS = 20;
-    private static final String DEFAULT_NAME = "Player One";
     private String name;
     private int lifePoints;
     private final Bag bag;
 
     public Player(String name){
         this.name = name;
-        this.lifePoints = DEFAULT_LIFE_POINTS;
-        bag = new Bag();
-    }
-    public Player() {
-        this.name = DEFAULT_NAME;
         this.lifePoints = DEFAULT_LIFE_POINTS;
         bag = new Bag();
     }

@@ -26,10 +26,14 @@ public class GameController {
     }
 
     public void runGame() {
-        currentRoom = RoomFactory.getInstance().generateGameMap(DEFAULT_MAP_RECURSION_DEPTH);
-        player = new Player();
-        gameEnded = false;
         String input;
+        System.out.println("What's your name?");
+        System.out.print(">");
+        input = InputController.readString();
+        player = new Player(input);
+        currentRoom = RoomFactory.getInstance().generateGameMap(DEFAULT_MAP_RECURSION_DEPTH);
+        gameEnded = false;
+        System.out.println("Welcome " + player.getName() + ", let's play!");
 
         while (!isGameEnded()) {
             System.out.println("What do you wanna do?");
