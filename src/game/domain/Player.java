@@ -1,16 +1,20 @@
 package game.domain;
 
-import java.util.List;
+import java.util.Optional;
 
 public class Player {
     private static final int DEFAULT_LIFE_POINTS = 20;
-    private String name;
+    private final String name;
     private int lifePoints;
     private final Bag bag;
 
     public Player(String name){
+        this(name, DEFAULT_LIFE_POINTS);
+    }
+
+    public Player(String name, int lifePoints) {
         this.name = name;
-        this.lifePoints = DEFAULT_LIFE_POINTS;
+        this.lifePoints = lifePoints;
         bag = new Bag();
     }
 
@@ -18,40 +22,20 @@ public class Player {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getBagDescription() {
+        return bag.toString();
     }
 
-    public int getLifePoints() {
-        return lifePoints;
+    public Optional<Item> getItemByName(String itemName) {
+        return bag.getItemByName(itemName);
     }
 
-    public void setLifePoints(int lifePoints) {
-        this.lifePoints = lifePoints;
+    public boolean pickItem(Item item) {
+        return bag.addItem(item);
     }
 
-    public Bag getBag() {
-        return bag;
-    }
-
-    public int getAvailableSlots(){
-        return bag.getAvailableSlots();
-    }
-
-    public void updateAvailableSlots(int newAvailableSlots) {
-        bag.setAvailableSlots(newAvailableSlots);
-    }
-
-    public void getItem(Item item) {
-        bag.getItem(item);
-    }
-
-    public void dropItem(Item item) {
-        bag.dropItem(item);
-    }
-
-    public List<Item> getCollectedItems() {
-        return bag.getItemList();
+    public boolean dropItem(Item item) {
+        return bag.removeItem(item);
     }
 
 }

@@ -1,6 +1,7 @@
-package map.utils;
+package map.domain;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public enum Direction {
     NORTH("north"),
@@ -13,11 +14,10 @@ public enum Direction {
         this.label = label;
     }
 
-    public static Direction getDirectionByString(String string) {
+    public static Optional<Direction> getDirectionByString(String string) {
         return Arrays.stream(Direction.values())
                 .filter(direction -> direction.label.equals(string))
-                .findFirst()
-                .orElseThrow();
+                .findFirst();
     }
 
     public static Direction getOppositeDirection(Direction direction) {

@@ -7,7 +7,9 @@ import game.domain.Player;
 import map.domain.Room;
 import map.utils.RoomFactory;
 
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class GameController {
@@ -43,19 +45,12 @@ public class GameController {
             input = InputController.readString();
 
             String[] splitInput = input.trim().split("\\s+");
+            String commandName = splitInput[0].toLowerCase();
+            List<String> parameters = new ArrayList<>(Arrays.asList(splitInput).subList(1, splitInput.length));
+            //TODO: maybe commandname e parameters come istanze del singleton per non passarle al command?
 
-            if (splitInput.length > 2 || splitInput.length == 0) {
-                System.out.println("Invalid input");
-                continue;
-            }
-
-            try {
-                Command command = EnumCommand.getCommandByString(splitInput[0].toLowerCase());
-                command.execute(splitInput);
-            } catch (NoSuchElementException e) {
-                System.out.println("Invalid command");
-            }
-
+            Command command = EnumCommand.getCommandByString(commandName);
+            command.execute(parameters);
         }
     }
 

@@ -4,6 +4,7 @@ import animals.domain.Animal;
 import animals.utils.AnimalFactory;
 import game.domain.Item;
 import game.utils.ItemFactory;
+import map.domain.Direction;
 import map.domain.Room;
 
 import java.util.*;

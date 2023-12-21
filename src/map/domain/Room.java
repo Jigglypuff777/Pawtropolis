@@ -2,7 +2,6 @@ package map.domain;
 
 import animals.domain.Animal;
 import game.domain.Item;
-import map.utils.Direction;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,20 +19,10 @@ public class Room {
         this.adjacentRooms = adjacentRooms;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Set<Item> getItems() {
-        return items;
-    }
-
-    public Set<Animal> getAnimals() {
-        return animals;
-    }
-
-    public Map<Direction, Room> getAdjacentRooms() {
-        return adjacentRooms;
+    public Optional<Item> getItemByName(String itemName) {
+        return items.stream()
+                .filter(i -> i.getName().equalsIgnoreCase(itemName))
+                .findAny();
     }
 
     public Room getAdjacentRoomByDirection(Direction direction) {
@@ -44,24 +33,24 @@ public class Room {
         adjacentRooms.put(linkedDirection, linkedRoom);
     }
 
-    public void removePickedItem(Item item) {
+    public void removeItem(Item item) {
         items.remove(item);
     }
 
-    public void receiveDroppedItem(Item item) {
+    public void addItem(Item item) {
         items.add(item);
     }
 
     @Override
     public String toString() {
-        String itemsString = getItems().stream()
+        String itemsString = items.stream()
                 .map(Item::getName)
                 .collect(Collectors.joining(", ", "Items: ", "\n"));
 
-        String animalsString = getAnimals().stream()
+        String animalsString = animals.stream()
                 .map(animal -> animal.getName().concat("(" + animal.getClass().getSimpleName() + ")"))
                 .collect(Collectors.joining(", ", "NPC: ", ""));
 
-        return "You are in " + getName() + "\n" + itemsString + animalsString;
+        return "You are in " + name + "\n" + itemsString + animalsString;
     }
 }

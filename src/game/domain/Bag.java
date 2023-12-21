@@ -2,6 +2,7 @@ package game.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Bag {
@@ -10,32 +11,36 @@ public class Bag {
     private int availableSlots;
 
     public Bag(){
-        itemList = new ArrayList<>();
-        availableSlots = DEFAULT_AVAILABLE_SLOTS;
+        this(DEFAULT_AVAILABLE_SLOTS);
     }
-
-    public List<Item> getItemList() {
-        return itemList;
-    }
-
-
-    public int getAvailableSlots() {
-        return availableSlots;
-    }
-
-    public void setAvailableSlots(int availableSlots) {
+    public Bag(int availableSlots) {
         this.availableSlots = availableSlots;
+        this.itemList = new ArrayList<>();
     }
 
-    public void getItem(Item item) {
-        itemList.add(item);
+    public boolean addItem(Item item) {
+        if (availableSlots >= item.getRequiredSlots()) {
+            itemList.add(item);
+            availableSlots -= item.getRequiredSlots();
+            return true;
+        }
+        return false;
     }
-    public void dropItem(Item item) {
-        itemList.remove(item);
+
+    public boolean removeItem(Item item) {
+        availableSlots += item.getRequiredSlots();
+        return itemList.remove(item);
     }
+
+    public Optional<Item> getItemByName(String itemName) {
+        return itemList.stream()
+                .filter(i -> i.getName().equalsIgnoreCase(itemName))
+                .findAny();
+    }
+
     @Override
     public String toString() {
-        return this.getItemList().stream()
+        return itemList.stream()
                 .map(Item::getName)
                 .collect(Collectors.joining(", ", "In bag: ",""));
     }

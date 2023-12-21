@@ -4,29 +4,23 @@ import game.GameController;
 import game.domain.Item;
 import game.domain.Player;
 import map.domain.Room;
-import map.utils.Direction;
+import map.domain.Direction;
 
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 public enum EnumCommand implements Command {
     GO("go") {
         @Override
-        public void execute(String[] splitInput) {
-            if (splitInput.length != 2) {
-                System.out.println("You need to declare the direction");
-                return;
-            }
+        public void execute(List<String> parameters) {
+            String selectedDirectionName = String.join(" ", parameters);
 
-            Direction direction;
-            try {
-                direction = Direction.getDirectionByString(splitInput[1].toLowerCase());
-            } catch (NoSuchElementException e) {
+            Optional<Direction> directionOptional = Direction.getDirectionByString(selectedDirectionName);
+            if (directionOptional.isEmpty()) {
                 System.out.println("Invalid direction");
                 return;
             }
 
+            Direction direction = directionOptional.get();
             Room destinationRoom = gameController.getCurrentRoom().getAdjacentRoomByDirection(direction);
             if (destinationRoom != null) {
                 System.out.println(destinationRoom);
@@ -38,88 +32,84 @@ public enum EnumCommand implements Command {
     },
     GET("get") {
         @Override
-        public void execute(String[] splitInput) {
-            if (splitInput.length != 2) {
-                System.out.println("You need to choose an item to get");
-                return;
-            }
+        public void execute(List<String> parameters) {
+            String selectedItemName = String.join(" ", parameters);
             Room currentRoom = gameController.getCurrentRoom();
 
-            Optional<Item> optionalItem = currentRoom.getItems().stream()
-                    .filter(i -> i.getName().equalsIgnoreCase(splitInput[1]))
-                    .findFirst();
-
-            if (optionalItem.isEmpty()) {
+            Optional<Item> itemOptional = currentRoom.getItemByName(selectedItemName);
+            if (itemOptional.isEmpty()) {
                 System.out.println("The selected item is not in the room");
                 return;
             }
 
+            Item item = itemOptional.get();
             Player player = gameController.getPlayer();
-            Item item = optionalItem.get();
-            if (item.getRequiredSlots() > player.getAvailableSlots()) {
-                System.out.println("You don't have enough slots");
-                return;
+            if (player.pickItem(item)) {
+                currentRoom.removeItem(item);
+            } else {
+                System.out.println("You don't have enough available slots");
             }
-
-            player.getItem(item);
-            currentRoom.removePickedItem(item);
-            int newAvailableSlots = player.getAvailableSlots() - item.getRequiredSlots();
-            player.updateAvailableSlots(newAvailableSlots);
         }
     },
     DROP("drop") {
         @Override
-        public void execute(String[] splitInput) {
-            if (splitInput.length != 2) {
-                System.out.println("You need to choose an item to drop");
-                return;
-            }
+        public void execute(List<String> parameters) {
+            String selectedItemName = String.join(" ", parameters);
 
             Player player = gameController.getPlayer();
-            Optional<Item> optionalItem = player.getCollectedItems().stream()
-                    .filter(i -> i.getName().equalsIgnoreCase(splitInput[1]))
-                    .findFirst();
-            if (optionalItem.isEmpty()) {
+            Optional<Item> itemOptional = player.getItemByName(selectedItemName);
+            if (itemOptional.isEmpty()) {
                 System.out.println("The selected item is not in the bag");
                 return;
             }
 
             Room currentRoom = gameController.getCurrentRoom();
-            Item item = optionalItem.get();
+            Item item = itemOptional.get();
             player.dropItem(item);
-            currentRoom.receiveDroppedItem(item);
-            int newAvailableSlots = player.getAvailableSlots() + item.getRequiredSlots();
-            player.updateAvailableSlots(newAvailableSlots);
+            currentRoom.addItem(item);
         }
     },
     LOOK("look") {
         @Override
-        public void execute(String[] splitInput) {
-            if (splitInput.length > 1) {
-                System.out.println("Invalid input");
-                return;
+        public void execute(List<String> parameters) {
+            if (parameters.isEmpty()) {
+                System.out.println(gameController.getCurrentRoom());
+            } else {
+                System.out.println("Invalid command");
             }
-            System.out.println(gameController.getCurrentRoom());
         }
     },
     BAG("bag") {
         @Override
-        public void execute(String[] splitInput) {
-            if (splitInput.length > 1) {
-                System.out.println("Invalid input");
-                return;
+        public void execute(List<String> parameters) {
+            if (parameters.isEmpty()) {
+                System.out.println(gameController.getPlayer().getBagDescription());
+            } else {
+                System.out.println(INVALID_INPUT);
             }
-            System.out.println(gameController.getPlayer().getBag());
+
         }
     },
     EXIT("exit") {
         @Override
-        public void execute(String[] splitInput) {
-            gameController.setGameEnded(true);
+        public void execute(List<String> parameters) {
+            if (parameters.isEmpty()) {
+                gameController.setGameEnded(true);
+            } else {
+                System.out.println(INVALID_INPUT);
+            }
+
+        }
+    },
+    INVALID("") {
+        @Override
+        public void execute(List<String> parameters) {
+            System.out.println(INVALID_INPUT);
         }
     };
 
     private static final GameController gameController = GameController.getInstance();
+    public static final String INVALID_INPUT = "Invalid input";
     private final String label;
 
     EnumCommand(String label) {
@@ -130,6 +120,6 @@ public enum EnumCommand implements Command {
         return Arrays.stream(EnumCommand.values())
                 .filter(command -> command.label.equals(string))
                 .findFirst()
-                .orElseThrow();
+                .orElse(INVALID);
     }
 }

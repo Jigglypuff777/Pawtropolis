@@ -12,7 +12,7 @@ public class ItemFactory {
             "Katana", 2,
             "Gun", 3,
             "Bazooka", 4,
-            "Pokédex", 5,
+            "Spada lunga", 5,
             "Pokéball", 5,
             "Masterball", 10,
             "Ultraball", 7,
