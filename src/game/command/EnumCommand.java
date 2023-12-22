@@ -44,7 +44,7 @@ public enum EnumCommand implements Command {
 
             Item item = itemOptional.get();
             Player player = gameController.getPlayer();
-            if (player.pickItem(item)) {
+            if (player.addItem(item)) {
                 currentRoom.removeItem(item);
             } else {
                 System.out.println("You don't have enough available slots");
@@ -65,7 +65,7 @@ public enum EnumCommand implements Command {
 
             Room currentRoom = gameController.getCurrentRoom();
             Item item = itemOptional.get();
-            player.dropItem(item);
+            player.removeItem(item);
             currentRoom.addItem(item);
         }
     },

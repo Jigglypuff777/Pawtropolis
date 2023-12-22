@@ -30,11 +30,11 @@ public class Player {
         return bag.getItemByName(itemName);
     }
 
-    public boolean pickItem(Item item) {
+    public boolean addItem(Item item) {
         return bag.addItem(item);
     }
 
-    public boolean dropItem(Item item) {
+    public boolean removeItem(Item item) {
         return bag.removeItem(item);
     }
 
