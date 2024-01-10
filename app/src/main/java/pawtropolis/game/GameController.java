@@ -1,5 +1,7 @@
 package pawtropolis.game;
 
+import lombok.Getter;
+import lombok.Setter;
 import pawtropolis.game.command.Command;
 import pawtropolis.game.command.EnumCommand;
 import pawtropolis.game.console.InputController;
@@ -11,12 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+@Getter
 public class GameController {
     private static GameController instance = null;
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
+    @Setter
     private Room currentRoom;
     private Player player;
+    @Setter
     private boolean gameEnded;
 
     private GameController() {
@@ -51,25 +55,5 @@ public class GameController {
             Command command = EnumCommand.getCommandByString(commandName);
             command.execute(parameters);
         }
-    }
-
-    public Room getCurrentRoom() {
-        return currentRoom;
-    }
-
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public boolean isGameEnded() {
-        return gameEnded;
-    }
-
-    public void setGameEnded(boolean gameEnded) {
-        this.gameEnded = gameEnded;
     }
 }

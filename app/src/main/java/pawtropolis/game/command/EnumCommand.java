@@ -1,5 +1,6 @@
 package pawtropolis.game.command;
 
+import lombok.RequiredArgsConstructor;
 import pawtropolis.game.GameController;
 import pawtropolis.game.domain.Item;
 import pawtropolis.game.domain.Player;
@@ -8,6 +9,7 @@ import pawtropolis.map.domain.Room;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 public enum EnumCommand implements Command {
     GO("go") {
         @Override
@@ -111,10 +113,6 @@ public enum EnumCommand implements Command {
     private static final GameController gameController = GameController.getInstance();
     public static final String INVALID_INPUT = "Invalid input";
     private final String label;
-
-    EnumCommand(String label) {
-        this.label = label;
-    }
 
     public static Command getCommandByString(String string) {
         return Arrays.stream(EnumCommand.values())
