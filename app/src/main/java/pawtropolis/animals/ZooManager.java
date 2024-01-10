@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class ZooManager {
-
     private final Map<Class<? extends Animal>, List<Animal>> animalsMap;
 
     public ZooManager() {
