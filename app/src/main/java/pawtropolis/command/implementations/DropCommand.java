@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class DropCommand extends ParametrizedCommand {
-    protected DropCommand(List<String> parameters) {
+    public DropCommand(List<String> parameters) {
         super(parameters);
     }
 

@@ -2,14 +2,15 @@ package pawtropolis.command;
 
 import pawtropolis.command.implementations.Command;
 import pawtropolis.command.implementations.InvalidCommand;
+import pawtropolis.command.implementations.ParametrizedCommand;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CommandFactory {
     private static CommandFactory instance = null;
@@ -31,16 +32,21 @@ public class CommandFactory {
         return findAllClassesUsingClassLoader(packageName)
                 .stream()
                 .map(clazz -> {
-                    try {
-                        return (Command) clazz.getConstructor().newInstance();
-                    } catch (Exception e) {
-                        // Gestisci le eccezioni appropriatamente
-                        e.printStackTrace();
-                        e.toString();
-                        e.getMessage();
+                    if (Modifier.isAbstract(clazz.getModifiers())) {
                         return null;
                     }
-                })
+
+                    try {
+                        if ((ParametrizedCommand.class).isAssignableFrom(clazz)) {
+                            return (Command) clazz.asSubclass(ParametrizedCommand.class).getConstructor(List.class).newInstance(new ArrayList<>());
+                        } else {
+                            return (Command) clazz.getConstructor().newInstance();
+                        }
+                    } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                             InvocationTargetException e) {
+                        e.printStackTrace();
+                        return null;
+                    }})
                 .filter(instance -> instance != null)
                 .collect(Collectors.toSet());
     }
@@ -70,9 +76,15 @@ public class CommandFactory {
         String commandName = splitInput[0].toLowerCase();
         List<String> parameters = new ArrayList<>(Arrays.asList(splitInput).subList(1, splitInput.length));
 
-        return commandSet.stream()
-                .filter(command -> command.getClass().getSimpleName().equalsIgnoreCase(commandName + "Command"))
+         Command command = commandSet.stream()
+                .filter(c -> c.getClass().getSimpleName().equalsIgnoreCase(commandName + "Command"))
                 .findFirst()
                 .orElse(new InvalidCommand());
+
+         if ((ParametrizedCommand.class).isAssignableFrom(command.getClass())) {
+             ((ParametrizedCommand)command).setParameters(parameters);
+         }
+
+         return command;
     }
 }
