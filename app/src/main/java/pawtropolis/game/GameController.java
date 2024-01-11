@@ -2,8 +2,8 @@ package pawtropolis.game;
 
 import lombok.Getter;
 import lombok.Setter;
-import pawtropolis.game.command.Command;
-import pawtropolis.game.command.EnumCommand;
+import pawtropolis.command.CommandFactory;
+import pawtropolis.command.implementations.Command;
 import pawtropolis.game.console.InputController;
 import pawtropolis.game.domain.Player;
 import pawtropolis.map.domain.Room;
@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 public class GameController {
     private static GameController instance = null;
+    private static CommandFactory commandFactory;
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     @Setter
     private Room currentRoom;
@@ -24,6 +25,7 @@ public class GameController {
     private boolean gameEnded;
 
     private GameController() {
+        commandFactory = CommandFactory.getInstance();
     }
 
     public static GameController getInstance() {
@@ -48,12 +50,8 @@ public class GameController {
             System.out.print(">");
             input = InputController.readString();
 
-            String[] splitInput = input.trim().split("\\s+");
-            String commandName = splitInput[0].toLowerCase();
-            List<String> parameters = new ArrayList<>(Arrays.asList(splitInput).subList(1, splitInput.length));
-
-            Command command = EnumCommand.getCommandByString(commandName);
-            command.execute(parameters);
+            Command command = commandFactory.getCommandByString(input);
+            command.execute();
         }
     }
 }
