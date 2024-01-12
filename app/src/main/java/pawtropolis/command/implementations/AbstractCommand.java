@@ -5,8 +5,8 @@ import pawtropolis.game.GameController;
 public abstract class Command {
     protected static GameController gameController;
 
-    protected Command() {
-        this.gameController = GameController.getInstance();
+    protected Command(GameController gameController) {
+        this.gameController = gameController;
     }
 
     public abstract void execute();
