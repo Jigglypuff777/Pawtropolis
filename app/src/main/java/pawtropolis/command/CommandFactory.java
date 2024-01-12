@@ -1,43 +1,46 @@
 package pawtropolis.command;
 
+import org.springframework.beans.factory.ListableBeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pawtropolis.command.implementations.Command;
-import pawtropolis.command.implementations.InvalidCommand;
 import pawtropolis.command.implementations.ParametrizedCommand;
-import pawtropolis.command.utils.ClassLoaderUtil;
+import pawtropolis.command.utils.ParsedCommand;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
+@Component
 public class CommandFactory {
-    private static CommandFactory instance = null;
-    private static Set<Command> commandSet;
-    private static final String PACKAGE_PATH_STRING = "pawtropolis.command.implementations";
 
+    @Autowired
+    private ListableBeanFactory beanFactory;
 
-    private CommandFactory() {
-        this.commandSet = ClassLoaderUtil.createInstancesInPackage(PACKAGE_PATH_STRING);
-    }
+    public Command createCommand(String inputString) {
+        ParsedCommand parsedCommand = parseCommand(inputString);
 
-    public static CommandFactory getInstance() {
-        if (instance == null) {
-            instance = new CommandFactory();
-        }
-        return instance;
-    }
+        Map<String, Command> commandBeans = beanFactory.getBeansOfType(Command.class);
 
-    public static Command getCommandByString(String string) {
-        String[] splitInput = string.trim().split("\\s+");
-        String commandName = splitInput[0].toLowerCase();
-        List<String> parameters = new ArrayList<>(Arrays.asList(splitInput).subList(1, splitInput.length));
-
-         Command command = commandSet.stream()
-                .filter(c -> c.getClass().getSimpleName().equalsIgnoreCase(commandName + "Command"))
+        Command command = commandBeans.values().stream()
+                .filter(cmd -> cmd.getClass().getSimpleName().equalsIgnoreCase(parsedCommand.getCommandType() + "Command"))
                 .findFirst()
-                .orElse(new InvalidCommand());
+                .orElseGet(() -> beanFactory.getBean("invalidCommand", Command.class));
 
-         if ((ParametrizedCommand.class).isAssignableFrom(command.getClass())) {
-             ((ParametrizedCommand)command).setParameters(parameters);
-         }
+        if (command instanceof ParametrizedCommand) {
+            ((ParametrizedCommand) command).setParameters(parsedCommand.getParameters());
+        }
 
-         return command;
+        return command;
     }
+
+    private ParsedCommand parseCommand(String inputString) {
+        List<String> inputTokens = Arrays.asList(inputString.split("\s+"));
+
+        String commandType = inputTokens.get(0);
+        List<String> parameters = inputTokens.subList(1, inputTokens.size());
+
+        return new ParsedCommand(commandType, parameters);
+    }
+
 }

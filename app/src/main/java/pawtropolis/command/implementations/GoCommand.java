@@ -1,14 +1,17 @@
 package pawtropolis.command.implementations;
 
+import org.springframework.stereotype.Component;
+import pawtropolis.game.GameController;
 import pawtropolis.map.domain.Direction;
 import pawtropolis.map.domain.Room;
 
 import java.util.List;
 import java.util.Optional;
 
-public class GoCommand extends ParametrizedCommand {
-    public GoCommand(List<String> parameters) {
-        super(parameters);
+@Component
+public class GoCommand extends AbstractParametrizedCommand {
+    public GoCommand(GameController gameController) {
+        super(gameController);
     }
 
     @Override

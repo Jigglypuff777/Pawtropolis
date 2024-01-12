@@ -1,10 +1,12 @@
 package pawtropolis.command.implementations;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
+import pawtropolis.game.GameController;
 
-public class LookCommand extends Command {
-    public LookCommand() {
-        super();
+@Component
+public class LookCommand extends AbstractCommand {
+    public LookCommand(GameController gameController) {
+        super(gameController);
     }
 
     @Override

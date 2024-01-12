@@ -1,5 +1,7 @@
 package pawtropolis.command.implementations;
 
+import org.springframework.stereotype.Component;
+import pawtropolis.game.GameController;
 import pawtropolis.game.domain.Item;
 import pawtropolis.game.domain.Player;
 import pawtropolis.map.domain.Room;
@@ -7,9 +9,10 @@ import pawtropolis.map.domain.Room;
 import java.util.List;
 import java.util.Optional;
 
-public class GetCommand extends ParametrizedCommand {
-    public GetCommand(List<String> parameters) {
-        super(parameters);
+@Component
+public class GetCommand extends AbstractParametrizedCommand {
+    public GetCommand(GameController gameController) {
+        super(gameController);
     }
 
     @Override
