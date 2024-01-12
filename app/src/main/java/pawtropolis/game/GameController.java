@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 public class GameController {
     private static GameController instance = null;
-//    private static CommandFactory commandFactory;
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     @Setter
     private Room currentRoom;
@@ -25,7 +24,6 @@ public class GameController {
     private boolean gameEnded;
 
     private GameController() {
-//        commandFactory = CommandFactory.getInstance();
     }
 
     public static GameController getInstance() {
@@ -36,6 +34,7 @@ public class GameController {
     }
 
     public void runGame() {
+        CommandFactory commandFactory = CommandFactory.getInstance();
         String input;
         System.out.println("What's your name?");
         System.out.print(">");
@@ -50,7 +49,7 @@ public class GameController {
             System.out.print(">");
             input = InputController.readString();
 
-            Command command = CommandFactory.getInstance().getCommandByString(input);
+            Command command = commandFactory.getCommandByString(input);
             command.execute();
         }
     }
