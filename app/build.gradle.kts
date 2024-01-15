@@ -5,6 +5,12 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
 }
 
+tasks.withType<JavaExec> {
+    doFirst {
+        systemProperty("file.encoding", "UTF-8")
+    }
+}
+
 repositories {
     mavenCentral()
 }
