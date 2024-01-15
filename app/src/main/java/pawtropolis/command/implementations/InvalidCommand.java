@@ -1,8 +1,14 @@
 package pawtropolis.command.implementations;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
+import pawtropolis.game.GameController;
 
-public class InvalidCommand extends Command {
+@Component
+public class InvalidCommand extends AbstractCommand {
+    protected InvalidCommand(GameController gameController) {
+        super(gameController);
+    }
+
     @Override
     public void execute() {
         System.out.println("Invalid input");
