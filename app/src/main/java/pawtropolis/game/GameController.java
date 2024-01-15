@@ -1,11 +1,11 @@
 package pawtropolis.game;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pawtropolis.command.CommandFactory;
-import pawtropolis.command.implementations.AbstractCommand;
 import pawtropolis.command.implementations.Command;
 import pawtropolis.game.console.InputController;
 import pawtropolis.game.domain.Player;
@@ -14,17 +14,18 @@ import pawtropolis.map.utils.RoomFactory;
 
 @Component
 @Getter
+@RequiredArgsConstructor
 public class GameController {
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
-    @Setter
-    private Room currentRoom;
+    @Getter(AccessLevel.NONE)
+    private final CommandFactory commandFactory;
     private Player player;
     @Setter
+    private Room currentRoom;
+    @Setter
     private boolean gameEnded;
-    @Autowired
-    private CommandFactory commandFactory;
 
-    public void runGame() {;
+    public void runGame() {
         String input;
         System.out.println("What's your name?");
         System.out.print(">");
@@ -39,7 +40,7 @@ public class GameController {
             System.out.print(">");
             input = InputController.readString();
 
-            Command command = commandFactory.createCommand(input);
+            Command command = commandFactory.getCommandByString(input);
             command.execute();
         }
     }

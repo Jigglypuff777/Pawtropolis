@@ -1,12 +1,10 @@
 package pawtropolis.command.implementations;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import pawtropolis.game.GameController;
 
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractCommand implements Command {
-    protected GameController gameController;
-    @Autowired
-    protected AbstractCommand(GameController gameController) {
-        this.gameController = gameController;
-    }
+    protected final GameController gameController;
 }

@@ -1,7 +1,7 @@
 package pawtropolis.command;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ListableBeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pawtropolis.command.implementations.Command;
 import pawtropolis.command.implementations.ParametrizedCommand;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class CommandFactory {
 
-    @Autowired
-    private ListableBeanFactory beanFactory;
+    private final ListableBeanFactory beanFactory;
 
-    public Command createCommand(String inputString) {
+    public Command getCommandByString(String inputString) {
         ParsedCommand parsedCommand = parseCommand(inputString);
 
         Map<String, Command> commandBeans = beanFactory.getBeansOfType(Command.class);
@@ -28,7 +28,7 @@ public class CommandFactory {
                 .orElseGet(() -> beanFactory.getBean("invalidCommand", Command.class));
 
         if (command instanceof ParametrizedCommand) {
-            ((ParametrizedCommand) command).setParameters(parsedCommand.getParameters());
+            ((ParametrizedCommand)command).setParameters(parsedCommand.getParameters());
         }
 
         return command;
@@ -42,5 +42,4 @@ public class CommandFactory {
 
         return new ParsedCommand(commandType, parameters);
     }
-
 }
