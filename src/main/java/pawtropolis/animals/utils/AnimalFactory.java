@@ -1,5 +1,6 @@
 package pawtropolis.animals.utils;
 
+
 import pawtropolis.animals.domain.Animal;
 import pawtropolis.animals.domain.Eagle;
 import pawtropolis.animals.domain.Lion;

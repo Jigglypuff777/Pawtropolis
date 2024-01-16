@@ -8,15 +8,15 @@ import pawtropolis.game.GameController;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-public class App implements CommandLineRunner {
-    private final GameController gameController;
+public class PawtropolisApplication implements CommandLineRunner {
+	private final GameController gameController;
 
-    public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(PawtropolisApplication.class, args);
+	}
 
-    @Override
-    public void run(String... args) throws Exception {
-        gameController.runGame();
-    }
+	@Override
+	public void run(String... args) throws Exception {
+		gameController.runGame();
+	}
 }
