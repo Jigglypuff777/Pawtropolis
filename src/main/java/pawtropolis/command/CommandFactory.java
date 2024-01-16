@@ -22,13 +22,18 @@ public class CommandFactory {
 
         Map<String, Command> commandBeans = beanFactory.getBeansOfType(Command.class);
 
-        Command command = commandBeans.values().stream()
-                .filter(cmd -> cmd.getClass().getSimpleName().equalsIgnoreCase(parsedCommand.getCommandType() + "Command"))
+        Command command = commandBeans.keySet().stream()
+                .filter(cmd -> cmd.equalsIgnoreCase(parsedCommand.getCommandType() + "Command"))
+                .map(commandBeans::get)
                 .findFirst()
                 .orElseGet(() -> beanFactory.getBean("invalidCommand", Command.class));
 
         if (command instanceof ParametrizedCommand) {
-            ((ParametrizedCommand)command).setParameters(parsedCommand.getParameters());
+            ((ParametrizedCommand) command).setParameters(parsedCommand.getParameters());
+        } else {
+            if (!parsedCommand.getParameters().isEmpty()) {
+                command = beanFactory.getBean("invalidCommand", Command.class);
+            }
         }
 
         return command;
