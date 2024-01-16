@@ -5,7 +5,6 @@ import pawtropolis.game.GameController;
 import pawtropolis.map.domain.Direction;
 import pawtropolis.map.domain.Room;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
