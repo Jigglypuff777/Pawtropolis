@@ -31,7 +31,7 @@ public class CommandFactory {
         if (command instanceof ParametrizedCommand) {
             ((ParametrizedCommand) command).setParameters(parsedCommand.getParameters());
         } else {
-            if (!parsedCommand.getParameters().isEmpty()) {
+            if (notParametrizedCommandHasParameters(parsedCommand)) {
                 command = beanFactory.getBean("invalidCommand", Command.class);
             }
         }
@@ -46,5 +46,9 @@ public class CommandFactory {
         List<String> parameters = inputTokens.subList(1, inputTokens.size());
 
         return new ParsedCommand(commandType, parameters);
+    }
+
+    private boolean notParametrizedCommandHasParameters(ParsedCommand parsedCommand) {
+        return !(parsedCommand.getParameters().isEmpty());
     }
 }
