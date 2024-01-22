@@ -5,7 +5,7 @@ import pawtropolis.game.GameController;
 
 @Component
 public class InvalidCommand extends AbstractCommand {
-    protected InvalidCommand(GameController gameController) {
+    private InvalidCommand(GameController gameController) {
         super(gameController);
     }
 

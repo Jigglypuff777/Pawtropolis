@@ -1,5 +1,6 @@
 package pawtropolis.command;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommandFactory {
 
     private final ListableBeanFactory beanFactory;
@@ -40,6 +41,7 @@ public class CommandFactory {
     }
 
     private ParsedCommand parseCommand(String inputString) {
+        // TODO add slash
         List<String> inputTokens = Arrays.asList(inputString.split("\s+"));
 
         String commandType = inputTokens.get(0);

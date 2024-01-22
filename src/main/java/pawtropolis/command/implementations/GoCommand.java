@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Component
 public class GoCommand extends AbstractParametrizedCommand {
-    public GoCommand(GameController gameController) {
+    private GoCommand(GameController gameController) {
         super(gameController);
     }
 
