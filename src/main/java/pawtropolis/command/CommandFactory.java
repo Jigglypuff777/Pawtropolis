@@ -41,8 +41,7 @@ public class CommandFactory {
     }
 
     private ParsedCommand parseCommand(String inputString) {
-        // TODO add slash
-        List<String> inputTokens = Arrays.asList(inputString.split("\s+"));
+        List<String> inputTokens = Arrays.asList(inputString.split("\\s+"));
 
         String commandType = inputTokens.get(0);
         List<String> parameters = inputTokens.subList(1, inputTokens.size());
