@@ -1,5 +1,6 @@
 package pawtropolis;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -7,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pawtropolis.game.GameController;
 
 @SpringBootApplication
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PawtropolisApplication implements CommandLineRunner {
 	private final GameController gameController;
 

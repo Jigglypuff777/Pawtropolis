@@ -5,7 +5,7 @@ import pawtropolis.game.GameController;
 
 @Component
 public class ExitCommand extends AbstractCommand {
-    public ExitCommand(GameController gameController) {
+    private ExitCommand(GameController gameController) {
         super(gameController);
     }
 

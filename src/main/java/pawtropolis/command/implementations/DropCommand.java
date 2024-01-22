@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Component
 public class DropCommand extends AbstractParametrizedCommand {
-    public DropCommand(GameController gameController) {
+    private DropCommand(GameController gameController) {
         super(gameController);
     }
 

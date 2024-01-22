@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Component
 public class GetCommand extends AbstractParametrizedCommand {
-    public GetCommand(GameController gameController) {
+    private GetCommand(GameController gameController) {
         super(gameController);
     }
 

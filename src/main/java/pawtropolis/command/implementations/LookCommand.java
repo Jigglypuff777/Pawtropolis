@@ -5,7 +5,7 @@ import pawtropolis.game.GameController;
 
 @Component
 public class LookCommand extends AbstractCommand {
-    public LookCommand(GameController gameController) {
+    private LookCommand(GameController gameController) {
         super(gameController);
     }
 

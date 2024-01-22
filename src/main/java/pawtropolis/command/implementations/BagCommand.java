@@ -5,7 +5,7 @@ import pawtropolis.game.GameController;
 
 @Component
 public class BagCommand extends AbstractCommand {
-    public BagCommand(GameController gameController) {
+    private BagCommand(GameController gameController) {
         super(gameController);
     }
 

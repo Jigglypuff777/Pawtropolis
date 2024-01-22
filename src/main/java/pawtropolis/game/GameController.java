@@ -14,7 +14,7 @@ import pawtropolis.map.utils.RoomFactory;
 
 @Component
 @Getter
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameController {
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     @Getter(AccessLevel.NONE)
