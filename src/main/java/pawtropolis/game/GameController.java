@@ -2,8 +2,8 @@ package pawtropolis.game;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pawtropolis.command.CommandFactory;
 import pawtropolis.command.implementations.Command;
@@ -14,7 +14,6 @@ import pawtropolis.map.utils.RoomFactory;
 
 @Component
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameController {
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     @Getter(AccessLevel.NONE)
@@ -24,6 +23,11 @@ public class GameController {
     private Room currentRoom;
     @Setter
     private boolean gameEnded;
+
+    @Autowired
+    private GameController(CommandFactory commandFactory) {
+        this.commandFactory = commandFactory;
+    }
 
     public void runGame() {
         String input;
