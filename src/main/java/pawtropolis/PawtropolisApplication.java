@@ -11,7 +11,7 @@ public class PawtropolisApplication implements CommandLineRunner {
 	private final GameController gameController;
 
 	@Autowired
-	private PawtropolisApplication(GameController gameController) {
+	public PawtropolisApplication(GameController gameController) {
 		this.gameController = gameController;
 	}
 
