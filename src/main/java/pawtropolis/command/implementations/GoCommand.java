@@ -1,5 +1,6 @@
 package pawtropolis.command.implementations;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pawtropolis.game.GameController;
 import pawtropolis.map.domain.Direction;
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 @Component
 public class GoCommand extends AbstractParametrizedCommand {
+    @Autowired
     private GoCommand(GameController gameController) {
         super(gameController);
     }

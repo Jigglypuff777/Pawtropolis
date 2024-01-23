@@ -1,8 +1,7 @@
 package pawtropolis.command;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ListableBeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pawtropolis.command.implementations.Command;
 import pawtropolis.command.implementations.ParametrizedCommand;
@@ -13,10 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommandFactory {
 
     private final ListableBeanFactory beanFactory;
+
+    @Autowired
+    private CommandFactory(ListableBeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
 
     public Command getCommandByString(String inputString) {
         ParsedCommand parsedCommand = parseCommand(inputString);
