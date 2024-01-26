@@ -6,23 +6,20 @@ import pawtropolis.game.GameController;
 import pawtropolis.game.domain.Item;
 import pawtropolis.game.domain.Player;
 import pawtropolis.map.domain.Room;
-import pawtropolis.map.utils.MapController;
 
 import java.util.Optional;
 
 @Component
 public class GetCommand extends AbstractParametrizedCommand {
-    private final MapController mapController;
     @Autowired
-    private GetCommand(GameController gameController, MapController mapController) {
+    private GetCommand(GameController gameController) {
         super(gameController);
-        this.mapController = mapController;
     }
 
     @Override
     public void execute() {
         String selectedItemName = String.join(" ", parameters);
-        Room currentRoom = mapController.getCurrentRoom();
+        Room currentRoom = gameController.getCurrentRoom();
 
         Optional<Item> itemOptional = currentRoom.getItemByName(selectedItemName);
         if (itemOptional.isEmpty()) {

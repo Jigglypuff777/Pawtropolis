@@ -1,4 +1,4 @@
-package pawtropolis.map.utils;
+package pawtropolis.map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +14,7 @@ import pawtropolis.map.domain.Door;
 import pawtropolis.map.domain.Room;
 
 import java.util.*;
+
 @Getter
 @Setter
 @Component
@@ -24,7 +25,7 @@ public class MapController {
     private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     private Room currentRoom;
 
-    private MapController(){
+    private MapController() {
         currentRoom = generateGameMap(DEFAULT_MAP_RECURSION_DEPTH);
     }
 
@@ -54,25 +55,22 @@ public class MapController {
         return newRoom;
     }
 
-    public void changeCurrentRoom(Door door) {
-        currentRoom = door.getDestinationRoom();
-        System.out.println(currentRoom.toString());
-        door.swapRoom();
-    }
 
-    public boolean openDoor(Door door, Player player) {
+    public boolean changeRoomAttempt(Door door, Player player) {
         if (!door.isLocked()) {
+            changeCurrentRoom(door);
             return true;
         }
 
         if (askUserIfUnlock() && handleUnlockingAttempt(door, player)) {
             door.setLocked(false);
+            changeCurrentRoom(door);
             return true;
         }
         return false;
     }
 
-    private boolean askUserIfUnlock(){
+    private boolean askUserIfUnlock() {
         System.out.println("The door is locked: would you like to use an item to unlock it? (y/n)");
         String input = InputController.readString();
         if ("Y".equalsIgnoreCase(input)) {
@@ -85,7 +83,7 @@ public class MapController {
         }
     }
 
-    private boolean handleUnlockingAttempt(Door door, Player player){
+    private boolean handleUnlockingAttempt(Door door, Player player) {
         System.out.println("Type the name of the chosen item");
         String input = InputController.readString();
         Optional<Item> itemOptional = player.getItemByName(input);
@@ -94,11 +92,16 @@ public class MapController {
             return false;
         }
         Item item = itemOptional.get();
-        if (!(door.getUnlockingItem().equals(item))){
+        if (!(door.getUnlockingItem().equals(item))) {
             System.out.println("This is not the right item");
             return false;
         }
         player.removeItem(item);
         return true;
+    }
+
+    private void changeCurrentRoom(Door door) {
+        currentRoom = door.getDestinationRoom();
+        door.swapRooms();
     }
 }

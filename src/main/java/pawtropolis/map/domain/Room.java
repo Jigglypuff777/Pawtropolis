@@ -1,6 +1,5 @@
 package pawtropolis.map.domain;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pawtropolis.animals.domain.Animal;
 import pawtropolis.game.domain.Item;
@@ -37,6 +36,7 @@ public class Room {
     public void addItem(Item item) {
         items.add(item);
     }
+
     public Item getRandomItem() {
         return items.stream()
                 .skip(ThreadLocalRandom.current().nextInt(items.size()))
@@ -55,7 +55,7 @@ public class Room {
                 .collect(Collectors.joining(", ", "NPC: ", "\n"));
 
         String adjacentRoomString = doors.entrySet().stream()
-                .map(entry -> entry.getKey().toString().concat("(" + (entry.getValue().isLocked()? "locked" : "unlocked") + ")"))
+                .map(entry -> entry.getKey().toString().concat("(" + (entry.getValue().isLocked() ? "locked" : "unlocked") + ")"))
                 .collect(Collectors.joining(", ", "Doors: ", ""));
 
         return "You are in " + name + "\n" + itemsString + animalsString + adjacentRoomString;

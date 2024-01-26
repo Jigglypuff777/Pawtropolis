@@ -2,11 +2,8 @@ package pawtropolis.map.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import pawtropolis.game.GameController;
-import pawtropolis.game.console.InputController;
 import pawtropolis.game.domain.Item;
 
-import java.util.Optional;
 import java.util.Random;
 
 @Getter
@@ -19,21 +16,21 @@ public class Door {
     private boolean isLocked;
     private Item unlockingItem;
 
-    public Door(Room originRoom, Room destinationRoom){
+    public Door(Room originRoom, Room destinationRoom) {
         this.originRoom = originRoom;
         this.destinationRoom = destinationRoom;
         isLocked = random.nextBoolean();
-        unlockingItem = chooseRandomUnlockingItem(originRoom);
+        unlockingItem = getRandomUnlockingItem(originRoom);
     }
 
 
-    public void swapRoom() {
+    public void swapRooms() {
         Room temp = this.destinationRoom;
         this.destinationRoom = this.originRoom;
         this.originRoom = temp;
     }
 
-    private Item chooseRandomUnlockingItem(Room originRoom) {
+    private Item getRandomUnlockingItem(Room originRoom) {
         return originRoom.getRandomItem();
     }
 

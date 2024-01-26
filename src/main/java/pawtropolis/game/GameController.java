@@ -9,14 +9,16 @@ import pawtropolis.command.CommandFactory;
 import pawtropolis.command.implementations.Command;
 import pawtropolis.game.console.InputController;
 import pawtropolis.game.domain.Player;
+import pawtropolis.map.MapController;
+import pawtropolis.map.domain.Door;
 import pawtropolis.map.domain.Room;
-import pawtropolis.map.utils.MapController;
 
 @Component
 
 public class GameController {
     @Getter(AccessLevel.NONE)
     private final CommandFactory commandFactory;
+    private final MapController mapController;
     @Getter
     private Player player;
     @Getter
@@ -24,8 +26,18 @@ public class GameController {
     private boolean gameEnded;
 
     @Autowired
-    private GameController(CommandFactory commandFactory) {
+    private GameController(CommandFactory commandFactory, MapController mapController) {
         this.commandFactory = commandFactory;
+        this.mapController = mapController;
+    }
+
+    public boolean changeRoomAttempt(Door door) {
+        Player player = getPlayer();
+        return mapController.changeRoomAttempt(door, player);
+    }
+
+    public Room getCurrentRoom() {
+        return mapController.getCurrentRoom();
     }
 
     public void runGame() {
