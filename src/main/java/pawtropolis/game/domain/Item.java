@@ -1,7 +1,10 @@
 package pawtropolis.game.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.util.Objects;
+@EqualsAndHashCode
 @Getter
 public class Item {
     private final String name;

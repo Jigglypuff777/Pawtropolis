@@ -1,10 +1,12 @@
 package pawtropolis.map.domain;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pawtropolis.animals.domain.Animal;
 import pawtropolis.game.domain.Item;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -12,7 +14,7 @@ public class Room {
     private final String name;
     private final Set<Item> items;
     private final Set<Animal> animals;
-    private final Map<Direction, Room> adjacentRooms;
+    private final Map<Direction, Door> doors;
 
     public Optional<Item> getItemByName(String itemName) {
         return items.stream()
@@ -20,12 +22,12 @@ public class Room {
                 .findAny();
     }
 
-    public Room getAdjacentRoomByDirection(Direction direction) {
-        return adjacentRooms.get(direction);
+    public void putDoor(Direction linkedDirection, Door door) {
+        doors.put(linkedDirection, door);
     }
 
-    public void putAdjacentRoom(Direction linkedDirection, Room linkedRoom) {
-        adjacentRooms.put(linkedDirection, linkedRoom);
+    public Door getDoorByDirection(Direction direction) {
+        return doors.get(direction);
     }
 
     public void removeItem(Item item) {
@@ -34,6 +36,12 @@ public class Room {
 
     public void addItem(Item item) {
         items.add(item);
+    }
+    public Item getRandomItem() {
+        return items.stream()
+                .skip(ThreadLocalRandom.current().nextInt(items.size()))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -44,8 +52,12 @@ public class Room {
 
         String animalsString = animals.stream()
                 .map(animal -> animal.getName().concat("(" + animal.getClass().getSimpleName() + ")"))
-                .collect(Collectors.joining(", ", "NPC: ", ""));
+                .collect(Collectors.joining(", ", "NPC: ", "\n"));
 
-        return "You are in " + name + "\n" + itemsString + animalsString;
+        String adjacentRoomString = doors.entrySet().stream()
+                .map(entry -> entry.getKey().toString().concat("(" + (entry.getValue().isLocked()? "locked" : "unlocked") + ")"))
+                .collect(Collectors.joining(", ", "Doors: ", ""));
+
+        return "You are in " + name + "\n" + itemsString + animalsString + adjacentRoomString;
     }
 }
