@@ -28,4 +28,9 @@ public enum Direction {
             case WEST -> EAST;
         };
     }
+
+    @Override
+    public String toString() {
+        return super.toString().charAt(0) + super.toString().substring(1).toLowerCase();
+    }
 }

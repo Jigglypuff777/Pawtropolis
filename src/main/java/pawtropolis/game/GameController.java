@@ -10,17 +10,16 @@ import pawtropolis.command.implementations.Command;
 import pawtropolis.game.console.InputController;
 import pawtropolis.game.domain.Player;
 import pawtropolis.map.domain.Room;
-import pawtropolis.map.utils.RoomFactory;
+import pawtropolis.map.utils.MapController;
 
 @Component
-@Getter
+
 public class GameController {
-    private static final int DEFAULT_MAP_RECURSION_DEPTH = 3;
     @Getter(AccessLevel.NONE)
     private final CommandFactory commandFactory;
+    @Getter
     private Player player;
-    @Setter
-    private Room currentRoom;
+    @Getter
     @Setter
     private boolean gameEnded;
 
@@ -35,7 +34,6 @@ public class GameController {
         System.out.print(">");
         input = InputController.readString();
         player = new Player(input);
-        currentRoom = RoomFactory.getInstance().generateGameMap(DEFAULT_MAP_RECURSION_DEPTH);
         gameEnded = false;
         System.out.println("Welcome " + player.getName() + ", let's play!");
 

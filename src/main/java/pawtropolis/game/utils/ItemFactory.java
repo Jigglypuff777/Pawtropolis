@@ -12,12 +12,12 @@ public class ItemFactory {
             "Katana", 2,
             "Gun", 3,
             "Bazooka", 4,
-            "Spada lunga", 5,
-            "Pokéball", 5,
-            "Masterball", 10,
-            "Ultraball", 7,
-            "Potion", 4,
-            "Antidote", 4
+            "Long sword", 5,
+            "Pokéball", 3,
+            "Masterball", 5,
+            "Ultraball", 4,
+            "Potion", 2,
+            "Antidote", 1
     );
 
     private ItemFactory() {
