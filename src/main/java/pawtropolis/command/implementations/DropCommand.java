@@ -6,17 +6,14 @@ import pawtropolis.game.GameController;
 import pawtropolis.game.domain.Item;
 import pawtropolis.game.domain.Player;
 import pawtropolis.map.domain.Room;
-import pawtropolis.map.utils.MapController;
 
 import java.util.Optional;
 
 @Component
 public class DropCommand extends AbstractParametrizedCommand {
-    private final MapController mapController;
     @Autowired
-    private DropCommand(GameController gameController, MapController mapController) {
+    private DropCommand(GameController gameController) {
         super(gameController);
-        this.mapController = mapController;
     }
 
     @Override
@@ -30,7 +27,7 @@ public class DropCommand extends AbstractParametrizedCommand {
             return;
         }
 
-        Room currentRoom = mapController.getCurrentRoom();
+        Room currentRoom = gameController.getCurrentRoom();
         Item item = itemOptional.get();
         player.removeItem(item);
         currentRoom.addItem(item);
