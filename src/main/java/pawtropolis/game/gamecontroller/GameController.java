@@ -24,6 +24,7 @@ public class GameController {
     private Bag bag;
     private final ListableBeanFactory beanFactory;
     boolean gameEnd;
+    private final List<Room> roomList;
 
     public void populateGame() {
         player = new Player();
@@ -35,6 +36,12 @@ public class GameController {
         Room roomInazuma = new Room("Inazuma");
         Room roomSumeru = new Room("Sumeru");
         Room roomFontaine = new Room("Fontaine");
+
+        roomList.add(roomFontaine);
+        roomList.add(roomLiyue);
+        roomList.add(roomMonstadt);
+        roomList.add(roomSumeru);
+        roomList.add(roomInazuma);
 
         Item item1 = new Item("long sword", "A Sword user’s Normal Attack is typically a chain of “rapid strikes”", 5);
         Item item2 = new Item("bow", "A Bow user’s Normal Attack launches a chain of fast, mid-ranged shots", 10);
