@@ -64,16 +64,17 @@ VALUES ('Lion'),
 
 CREATE TABLE animal
 (
-    id           BIGSERIAL PRIMARY KEY,
-    name         TEXT NOT NULL,
-    age          BIGINT,
-    arrival_date DATE,
-    weight       DOUBLE PRECISION,
-    height       DOUBLE PRECISION,
-    room_id      BIGINT REFERENCES room (id),
-    species_id   BIGINT REFERENCES species (id),
-    wingspan     DOUBLE PRECISION,
-    tail_length  DOUBLE PRECISION
+    id             BIGSERIAL PRIMARY KEY,
+    name           TEXT NOT NULL,
+    age            INT,
+    favourite_food TEXT NOT NULL,
+    arrival_date   DATE,
+    weight         DOUBLE PRECISION,
+    height         DOUBLE PRECISION,
+    room_id        BIGINT REFERENCES room (id),
+    species_id     BIGINT REFERENCES species (id),
+    wingspan       DOUBLE PRECISION,
+    tail_length    DOUBLE PRECISION
 );
 
 CREATE TABLE game

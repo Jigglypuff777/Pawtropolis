@@ -23,8 +23,8 @@ public class GameController {
     private Player player;
     private Bag bag;
     private final ListableBeanFactory beanFactory;
-    boolean gameEnd;
     private final List<Room> roomList;
+    boolean gameEnd;
 
     public void populateGame() {
         player = new Player();
@@ -67,9 +67,8 @@ public class GameController {
 
         roomMonstadt.addItem(item1);
         roomLiyue.addItem(item2);
-        roomInazuma.addItem(item3);
+        roomInazuma.addItem(item4);
         roomFontaine.addItem(item3);
-        player.addItem(item4);
 
         roomMonstadt.addAnimal(lion1);
         roomMonstadt.addAnimal(eagle2);

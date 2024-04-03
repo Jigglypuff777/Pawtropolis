@@ -20,7 +20,10 @@ public class AnimalEntity {
     private String name;
 
     @Column(name = "age")
-    private Long age;
+    private Integer age;
+
+    @Column(name = "favourite_food")
+    private String favouriteFood;
 
     @Column(name = "arrival_date")
     private LocalDate arrivalDate;

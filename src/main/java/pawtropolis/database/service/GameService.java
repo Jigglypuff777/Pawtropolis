@@ -2,6 +2,7 @@ package pawtropolis.database.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pawtropolis.animals.Animal;
 import pawtropolis.database.entity.*;
 import pawtropolis.database.repo.*;
 import pawtropolis.database.utils.Converter;
@@ -39,28 +40,27 @@ public class GameService {
 
         PlayerEntity savedPlayer = playerRepository.save(converter.fromPlayerToEntity(playerToSave, savedBag));
 
+
         List<ItemEntity> itemsListToSave = bag.getItems().stream()
-                .map(item -> itemRepository.save(converter.fromItemToEntity(item, savedBag))).collect(Collectors.toList());
+                .map(item -> itemRepository.save(converter.fromItemToEntity(item, savedBag)))
+                .toList();
 
         List<Room> roomListToSave = gameController.getRoomList();
         saveRoom(roomListToSave);
 
-        saveItems(itemsListToSave);
-        saveGame(savedPlayer, currentRoom);
-
-    }
-
-    public void saveItems(List<ItemEntity> itemEntitiesToSave, Room currentRoom) {
-        // Save items
-        itemRepository.saveAll(itemEntitiesToSave);
-
-        // Save the room where the items were taken
-        RoomEntity roomEntity = roomRepository.findByName(currentRoom.getName());
-        for (ItemEntity itemEntity : itemEntitiesToSave) {
-            roomEntity.addItem(itemEntity);
+        for (Room room : roomListToSave) {
+            RoomEntity roomEntity = roomRepository.findByName(room.getName());
+            List<ItemEntity> itemListToSaveRoom = room.getItems().stream()
+                    .map(item -> itemRepository.save(converter.fromItemToEntityRoom(item, roomEntity)))
+                    .toList();
+            List<AnimalEntity> animalListToSave = room.getAnimals().stream()
+                    .map(animal -> animalRepository.save(converter.fromAnimalToEntity(animal, roomEntity)))
+                    .toList();
         }
-        roomRepository.save(roomEntity);
+
+        saveGame(savedPlayer, currentRoom);
     }
+
 
     public void saveRoom(List<Room> roomList) {
         List<String> existingRoomNames = roomRepository.findAll().stream()
