@@ -7,6 +7,7 @@ CREATE TABLE bag
 CREATE TABLE room
 (
     id   BIGSERIAL PRIMARY KEY,
+
     name TEXT NOT NULL
 );
 

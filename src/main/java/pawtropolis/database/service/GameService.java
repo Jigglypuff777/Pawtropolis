@@ -7,6 +7,7 @@ import pawtropolis.database.repo.*;
 import pawtropolis.database.utils.Converter;
 import pawtropolis.game.gamecontroller.GameController;
 import pawtropolis.game.model.Bag;
+import pawtropolis.game.model.Item;
 import pawtropolis.game.model.Player;
 import pawtropolis.game.model.Room;
 
@@ -38,27 +39,41 @@ public class GameService {
 
         PlayerEntity savedPlayer = playerRepository.save(converter.fromPlayerToEntity(playerToSave, savedBag));
 
-        List<ItemEntity> savedItems = bag.getItems().stream()
+        List<ItemEntity> itemsListToSave = bag.getItems().stream()
                 .map(item -> itemRepository.save(converter.fromItemToEntity(item, savedBag))).collect(Collectors.toList());
 
         List<Room> roomListToSave = gameController.getRoomList();
         saveRoom(roomListToSave);
+
+        saveItems(itemsListToSave);
         saveGame(savedPlayer, currentRoom);
 
+    }
+
+    public void saveItems(List<ItemEntity> itemEntitiesToSave, Room currentRoom) {
+        // Save items
+        itemRepository.saveAll(itemEntitiesToSave);
+
+        // Save the room where the items were taken
+        RoomEntity roomEntity = roomRepository.findByName(currentRoom.getName());
+        for (ItemEntity itemEntity : itemEntitiesToSave) {
+            roomEntity.addItem(itemEntity);
+        }
+        roomRepository.save(roomEntity);
     }
 
     public void saveRoom(List<Room> roomList) {
         List<String> existingRoomNames = roomRepository.findAll().stream()
                 .map(RoomEntity::getName)
-                .collect(Collectors.toList());
+                .toList();
 
         List<Room> roomToSave = roomList.stream()
                 .filter(room -> !existingRoomNames.contains(room.getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         List<RoomEntity> roomEntitiesToSave = roomToSave.stream()
                 .map(converter::fromRoomToEntity)
-                .collect(Collectors.toList());
+                .toList();
 
         roomRepository.saveAll(roomEntitiesToSave);
     }
