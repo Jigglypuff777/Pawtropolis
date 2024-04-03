@@ -34,32 +34,42 @@ public class GameService {
         Player playerToSave = gameController.getPlayer();
         Bag bag = playerToSave.getBag();
         BagEntity savedBag = bagRepository.save(converter.fromBagToEntity(bag));
+        Room currentRoom = gameController.getCurrentRoom();
 
         PlayerEntity savedPlayer = playerRepository.save(converter.fromPlayerToEntity(playerToSave, savedBag));
 
         List<ItemEntity> savedItems = bag.getItems().stream()
-                .map(item -> itemRepository.save(converter.fromItemToEntity(item, savedBag))).toList();
+                .map(item -> itemRepository.save(converter.fromItemToEntity(item, savedBag))).collect(Collectors.toList());
 
         List<Room> roomListToSave = gameController.getRoomList();
         saveRoom(roomListToSave);
+        saveGame(savedPlayer, currentRoom);
 
-        GameEntity gameToServe =
     }
 
-    public void saveRoom ( List<Room> roomList){
-
+    public void saveRoom(List<Room> roomList) {
         List<String> existingRoomNames = roomRepository.findAll().stream()
                 .map(RoomEntity::getName)
-                .toList();
+                .collect(Collectors.toList());
 
         List<Room> roomToSave = roomList.stream()
                 .filter(room -> !existingRoomNames.contains(room.getName()))
-                .toList();
+                .collect(Collectors.toList());
 
-        Stream<RoomEntity> roomEntityStream = roomToSave.stream()
-                .map(converter::fromRoomToEntity);
+        List<RoomEntity> roomEntitiesToSave = roomToSave.stream()
+                .map(converter::fromRoomToEntity)
+                .collect(Collectors.toList());
 
-        roomRepository.saveAll(roomEntityStream.collect(Collectors.toList()));
+        roomRepository.saveAll(roomEntitiesToSave);
     }
 
+    public void saveGame(PlayerEntity playerEntity, Room currentRoom) {
+        GameEntity gameEntity = new GameEntity();
+        gameEntity.setPlayer(playerEntity);
+
+        RoomEntity roomEntity = roomRepository.findByName(currentRoom.getName());
+        gameEntity.setRoom(roomEntity);
+
+        gameRepository.save(gameEntity);
+    }
 }

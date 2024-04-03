@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import pawtropolis.database.entity.RoomEntity;
 @Repository
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
+    RoomEntity findByName(String name);
 }

@@ -22,4 +22,5 @@ public class GameEntity {
     @JoinColumn(name = "room_id")
     private RoomEntity room;
 
+
 }

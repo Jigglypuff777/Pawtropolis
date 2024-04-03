@@ -2,15 +2,11 @@ package pawtropolis.database.utils;
 
 import org.springframework.stereotype.Component;
 import pawtropolis.database.entity.*;
-import pawtropolis.game.gamecontroller.DirectionEnum;
+import pawtropolis.game.gamecontroller.GameController;
 import pawtropolis.game.model.Bag;
 import pawtropolis.game.model.Item;
 import pawtropolis.game.model.Player;
 import pawtropolis.game.model.Room;
-
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class Converter {
@@ -43,6 +39,7 @@ public class Converter {
         result.setName(room.getName());
         return result;
     }
+
 
 //    public RoomEntity fromAdjacentRoomToEntity(Map<DirectionEnum, Room> adjacentsRoom) {
 //        RoomEntity result = new RoomEntity();
