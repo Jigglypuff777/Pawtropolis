@@ -9,13 +9,15 @@ import java.util.*;
 
 @Data
 public class Room {
+    private long id;
     private String name;
-    private final List<Item> items;
+    private List<Item> items;
     private List<Animal> animals;
     private EnumMap<DirectionEnum, Room> adjacentsRoom;
 
 
-    public Room(String roomName) {
+    public Room(long id, String roomName) {
+        this.id = id;
         this.name = roomName;
         this.adjacentsRoom = new EnumMap<>(DirectionEnum.class);
         this.items = new ArrayList<>();

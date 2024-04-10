@@ -10,8 +10,8 @@ import java.time.LocalDate;
 public class WingedAnimal extends Animal {
     private double wingspan;
 
-    public WingedAnimal(String nickname, String favoriteFood, int age, LocalDate dateEntry, double weight, double height, double wingspan) {
-        super(nickname, favoriteFood, age, dateEntry, weight, height);
+    public WingedAnimal(long id, String nickname, String favoriteFood, int age, LocalDate dateEntry, double weight, double height, double wingspan) {
+        super(id, nickname, favoriteFood, age, dateEntry, weight, height);
         this.wingspan = wingspan;
     }
 

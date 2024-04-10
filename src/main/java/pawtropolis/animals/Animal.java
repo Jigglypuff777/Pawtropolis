@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class Animal {
+    private long id;
     private String nickname;
     private String favoriteFood;
     private int age;
@@ -15,7 +16,8 @@ public class Animal {
     private double weight;
     private double height;
 
-    public Animal(String nickname, String favoriteFood, int age, LocalDate dateEntry, double weight, double height) {
+    public Animal(long id, String nickname, String favoriteFood, int age, LocalDate dateEntry, double weight, double height) {
+        this.id = id;
         this.nickname = nickname;
         this.favoriteFood = favoriteFood;
         this.age = age;

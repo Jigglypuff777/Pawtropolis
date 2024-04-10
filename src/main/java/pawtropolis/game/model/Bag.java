@@ -9,10 +9,12 @@ import java.util.List;
 
 @Data
 public class Bag {
+    private long id;
     private List<Item> items;
     private int slot;
 
-    public Bag(int slot) {
+    public Bag(long id, int slot) {
+        this.id = id;
         this.items = new ArrayList<>();
         this.slot = slot;
     }

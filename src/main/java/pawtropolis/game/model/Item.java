@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
-
+    private long id;
     private String name;
     private String description;
     private int slotRequired;
