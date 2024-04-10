@@ -18,7 +18,7 @@ public class GameEntity {
     @JoinColumn(name = "player_id")
     private PlayerEntity player;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "room_id")
     private RoomEntity room;
 

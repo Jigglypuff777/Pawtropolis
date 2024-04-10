@@ -17,8 +17,8 @@ public class BagEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "available_slots")
-    private Integer availableSlots;
+    @Column(name = "occupied_slots")
+    private Integer occupiedSlots;
 
     @OneToMany(mappedBy = "bag")
     private Set<ItemEntity> items = new LinkedHashSet<>();

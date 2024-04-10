@@ -23,7 +23,7 @@ public class PlayerEntity {
     @Column(name = "life_points", nullable = false)
     private Integer lifePoints;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "bag_id")
     private BagEntity bag;
 

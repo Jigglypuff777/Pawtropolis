@@ -27,7 +27,7 @@ public class ItemEntity {
     @JoinColumn(name = "room_id")
     private RoomEntity room;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "bag_id")
     private BagEntity bag;
 
