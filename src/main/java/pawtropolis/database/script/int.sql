@@ -1,7 +1,7 @@
 CREATE TABLE bag
 (
-    id              BIGSERIAL PRIMARY KEY,
-    available_slots INT
+    id             BIGSERIAL PRIMARY KEY,
+    occupied_slots INT
 );
 
 CREATE TABLE room
