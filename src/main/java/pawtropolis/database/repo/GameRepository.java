@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 import pawtropolis.database.entity.GameEntity;
 @Repository
 public interface GameRepository extends JpaRepository<GameEntity, Long> {
+
+    GameEntity findByPlayer_Id(long playerId);
 }
