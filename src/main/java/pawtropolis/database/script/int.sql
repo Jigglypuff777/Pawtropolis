@@ -31,6 +31,13 @@ CREATE TABLE adjacent_room
     room_id          BIGINT REFERENCES room (id),
     adjacent_room_id BIGINT REFERENCES room (id)
 );
+INSERT INTO adjacent_room (direction_id, room_id, adjacent_room_id)
+VALUES
+    (3, 1, 2),  -- Monstadt (room_id: 1) is west (direction_id: 3) of Liyue (adjacent_room_id: 2)
+    (2, 2, 3),  -- Liyue (room_id: 2) is south (direction_id: 2) of Inazuma (adjacent_room_id: 3)
+    (3, 2, 4),  -- Liyue (room_id: 2) is west (direction_id: 3) of Sumeru (adjacent_room_id: 4)
+    (1, 4, 5);  -- Sumeru (room_id: 4) is north (direction_id: 1) of Fontaine (adjacent_room_id: 5)
+
 
 
 CREATE TABLE item
