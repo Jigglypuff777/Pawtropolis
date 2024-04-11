@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 import pawtropolis.database.entity.*;
 import pawtropolis.database.repo.*;
 import pawtropolis.database.utils.Converter;
+import pawtropolis.game.gamecontroller.DirectionEnum;
 import pawtropolis.game.gamecontroller.GameController;
 import pawtropolis.game.model.Bag;
 import pawtropolis.game.model.Player;
 import pawtropolis.game.model.Room;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -90,11 +92,18 @@ public class GameService {
                 .map(roomEntity -> {
                     List<ItemEntity> itemEntitiesForRoom = itemRepository.findByRoom_Id(roomEntity.getId());
                     List<AnimalEntity> animalEntitiesForRoom = animalRepository.findByRoom_Id(roomEntity.getId());
-                    return converter.fromEntityToRoom(roomEntity, itemEntitiesForRoom, animalEntitiesForRoom);
+                    List<AdjacentRoomEntity> adjacentRoomEntities = adjacentRoomRepository.findAdjacentsRooms(roomEntity.getId());
+
+                    Map<Long, Room> roomMap = roomEntities.stream()
+                            .collect(Collectors.toMap(RoomEntity::getId, room -> converter.fromEntityToRoom(room, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>())));
+
+                    EnumMap<DirectionEnum, Room> adjacentRooms = converter.getAdjacentRoomsMap(adjacentRoomEntities, roomMap);
+
+                    return converter.fromEntityToRoom(roomEntity, itemEntitiesForRoom, animalEntitiesForRoom, adjacentRoomEntities, roomMap);
                 })
                 .toList();
-    }
 
+    }
 
     private void saveGame(PlayerEntity savedPlayer, Room currentRoom) {
         GameEntity gameEntity = new GameEntity();
@@ -122,36 +131,50 @@ public class GameService {
 
 
     public Room loadSavedRoom() {
-        List<PlayerEntity> playerRecords = playerRepository
-                .findAll()
-                .stream()
-                .toList();
+        // Fetch player records
+        List<PlayerEntity> playerRecords = playerRepository.findAll();
 
-        long savedPlayerId = playerRecords.getFirst().getId();
+        // Retrieve saved player's ID
+        long savedPlayerId = playerRecords.get(0).getId();
+
+        // Retrieve the saved game for the player
         GameEntity savedGame = gameRepository.findByPlayer_Id(savedPlayerId);
 
-        List<ItemEntity> itemEntities = itemRepository.findByRoom_Id(savedGame.getRoom().getId());
-        List<AnimalEntity> animalEntities = animalRepository.findByRoom_Id(savedGame.getRoom().getId());
-        return converter.fromEntityToRoom(savedGame.getRoom(), itemEntities, animalEntities);
+        // Retrieve items, animals, and adjacent rooms for the saved game's room
+        long savedRoomId = savedGame.getRoom().getId();
+        List<ItemEntity> itemEntities = itemRepository.findByRoom_Id(savedRoomId);
+        List<AnimalEntity> animalEntities = animalRepository.findByRoom_Id(savedRoomId);
+        List<AdjacentRoomEntity> adjacentRoomEntities = adjacentRoomRepository.findAdjacentsRooms(savedRoomId);
+
+        // Get the room map from saveRoomList method
+        List<Room> rooms = saveRoomList();
+        Map<Long, Room> roomMap = rooms.stream().collect(Collectors.toMap(Room::getId, Function.identity()));
+
+        // Construct the enum map for adjacent rooms
+        EnumMap<DirectionEnum, Room> adjacentRooms = converter.getAdjacentRoomsMap(adjacentRoomEntities, roomMap);
+
+        // Construct and return the room
+        return converter.fromEntityToRoom(savedGame.getRoom(), itemEntities, animalEntities, adjacentRoomEntities, roomMap);
     }
 
-    public Player loadSavedPlayer(){
-        PlayerEntity playerEntity= playerRepository
+
+
+    public Player loadSavedPlayer() {
+        PlayerEntity playerEntity = playerRepository
                 .findAll()
                 .getFirst();
         return converter.fromEntityToPlayer(playerEntity);
     }
 
-    public Bag loadSavedBag(){
+    public Bag loadSavedBag() {
         BagEntity bagEntity = playerRepository
                 .findAll()
                 .getFirst()
                 .getBag();
 
         List<ItemEntity> itemEntities = itemRepository.findByBag_Id(bagEntity.getId());
-        return  converter.fromEntityToBag(bagEntity, itemEntities);
+        return converter.fromEntityToBag(bagEntity, itemEntities);
     }
-
 
 
 }

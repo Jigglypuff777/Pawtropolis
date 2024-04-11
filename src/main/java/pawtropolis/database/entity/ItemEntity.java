@@ -23,7 +23,7 @@ public class ItemEntity {
     @Column(name = "required_slots", nullable = false)
     private Integer requiredSlots;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "room_id")
     private RoomEntity room;
 

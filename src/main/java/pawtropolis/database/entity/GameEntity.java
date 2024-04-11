@@ -14,7 +14,7 @@ public class GameEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "player_id")
     private PlayerEntity player;
 

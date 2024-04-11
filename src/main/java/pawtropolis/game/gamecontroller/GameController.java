@@ -30,6 +30,7 @@ public class GameController {
     boolean gameEnd;
 
     public void populateGame() {
+        roomList = new ArrayList<>();
         bag = new Bag(1, 30);
         player = new Player(1, "Yoimiya", 100);
         player.setBag(bag);
