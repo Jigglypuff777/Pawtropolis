@@ -3,8 +3,6 @@ package pawtropolis.database.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

@@ -1,11 +1,13 @@
 package pawtropolis.game.model;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
 import pawtropolis.animals.Animal;
 import pawtropolis.game.gamecontroller.DirectionEnum;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 public class Room {
@@ -45,9 +47,6 @@ public class Room {
     public Map<DirectionEnum, Room> getAdjacentsRoom() {
         return adjacentsRoom;
     }
-
-
-
 
 
 }

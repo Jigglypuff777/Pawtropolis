@@ -2,6 +2,7 @@ package pawtropolis.database.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pawtropolis.animals.Animal;
 import pawtropolis.database.entity.*;
 import pawtropolis.database.repo.*;
 import pawtropolis.database.utils.Converter;
@@ -88,21 +89,25 @@ public class GameService {
     public List<Room> saveRoomList() {
         List<RoomEntity> roomEntities = roomRepository.findAll();
 
-        return roomEntities.stream()
-                .map(roomEntity -> {
-                    List<ItemEntity> itemEntitiesForRoom = itemRepository.findByRoom_Id(roomEntity.getId());
-                    List<AnimalEntity> animalEntitiesForRoom = animalRepository.findByRoom_Id(roomEntity.getId());
-                    List<AdjacentRoomEntity> adjacentRoomEntities = adjacentRoomRepository.findAdjacentsRooms(roomEntity.getId());
+        Map<Long, Room> roomMap = new HashMap<>();
+        for (RoomEntity roomEntity : roomEntities) {
+            Room room = converter.fromEntityToRoom(roomEntity);
+            room.setAnimals(converter.fromEntityListToAnimalList(animalRepository.findByRoom_Id(room.getId())));
+            room.setItems(converter.fromEntityToItemList(itemRepository.findByRoom_Id(room.getId())));
+            roomMap.put(room.getId(), room);
+        }
 
-                    Map<Long, Room> roomMap = roomEntities.stream()
-                            .collect(Collectors.toMap(RoomEntity::getId, room -> converter.fromEntityToRoom(room, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>())));
+        for (RoomEntity roomEntity : roomEntities) {
+            Room room = roomMap.get(roomEntity.getId());
+            List<AdjacentRoomEntity> adjacentRoomEntities = adjacentRoomRepository.findByRoom_Id(room.getId());
+            for (AdjacentRoomEntity adjacentRoomEntity : adjacentRoomEntities) {
+                DirectionEnum direction = converter.fromEntityToEnum(adjacentRoomEntity.getDirection());
+                Room adjacentRoom = roomMap.get(adjacentRoomEntity.getAdjacentRoom().getId());
+                room.addAdjacents(direction, adjacentRoom);
+            }
+        }
 
-                    EnumMap<DirectionEnum, Room> adjacentRooms = converter.getAdjacentRoomsMap(adjacentRoomEntities, roomMap);
-
-                    return converter.fromEntityToRoom(roomEntity, itemEntitiesForRoom, animalEntitiesForRoom, adjacentRoomEntities, roomMap);
-                })
-                .toList();
-
+        return new ArrayList<>(roomMap.values());
     }
 
     private void saveGame(PlayerEntity savedPlayer, Room currentRoom) {
@@ -130,33 +135,15 @@ public class GameService {
     }
 
 
-    public Room loadSavedRoom() {
-        // Fetch player records
+    public long loadSavedRoom() {
         List<PlayerEntity> playerRecords = playerRepository.findAll();
 
-        // Retrieve saved player's ID
         long savedPlayerId = playerRecords.get(0).getId();
 
-        // Retrieve the saved game for the player
         GameEntity savedGame = gameRepository.findByPlayer_Id(savedPlayerId);
 
-        // Retrieve items, animals, and adjacent rooms for the saved game's room
-        long savedRoomId = savedGame.getRoom().getId();
-        List<ItemEntity> itemEntities = itemRepository.findByRoom_Id(savedRoomId);
-        List<AnimalEntity> animalEntities = animalRepository.findByRoom_Id(savedRoomId);
-        List<AdjacentRoomEntity> adjacentRoomEntities = adjacentRoomRepository.findAdjacentsRooms(savedRoomId);
-
-        // Get the room map from saveRoomList method
-        List<Room> rooms = saveRoomList();
-        Map<Long, Room> roomMap = rooms.stream().collect(Collectors.toMap(Room::getId, Function.identity()));
-
-        // Construct the enum map for adjacent rooms
-        EnumMap<DirectionEnum, Room> adjacentRooms = converter.getAdjacentRoomsMap(adjacentRoomEntities, roomMap);
-
-        // Construct and return the room
-        return converter.fromEntityToRoom(savedGame.getRoom(), itemEntities, animalEntities, adjacentRoomEntities, roomMap);
+        return savedGame.getRoom().getId();
     }
-
 
 
     public Player loadSavedPlayer() {

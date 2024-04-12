@@ -96,7 +96,12 @@ public class GameController {
                     .orElse(null);
         } else {
             roomList = gameService.saveRoomList();
-            currentRoom = gameService.loadSavedRoom();
+            long roomId = gameService.loadSavedRoom();
+            currentRoom =getRoomList()
+                    .stream()
+                    .filter(room -> room.getId() == roomId)
+                    .findFirst()
+                    .get();
             player = gameService.loadSavedPlayer();
             bag = gameService.loadSavedBag();
             player.setBag(bag);
