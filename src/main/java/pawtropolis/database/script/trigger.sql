@@ -31,7 +31,6 @@ CREATE TRIGGER check_item_location_trigger
     FOR EACH ROW
     EXECUTE FUNCTION check_item_location();
 
-
 CREATE OR REPLACE FUNCTION check_2_item_location()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -74,3 +73,39 @@ CREATE TRIGGER check_species_attributes_trigger
     BEFORE INSERT ON animal
     FOR EACH ROW
     EXECUTE FUNCTION check_species_attributes();
+
+CREATE OR REPLACE FUNCTION update_adjacent_room()
+    RETURNS TRIGGER AS $$
+DECLARE
+    modification_count INTEGER;
+BEGIN
+    EXECUTE 'SELECT current_setting(''myvars.modification_count'', true)' INTO modification_count;
+
+    IF modification_count IS NULL THEN
+        EXECUTE 'SELECT set_config(''myvars.modification_count'', ''1'', false)';
+    ELSE
+        modification_count := modification_count + 1;
+        EXECUTE format('SELECT set_config(''myvars.modification_count'', ''%s'', false)', modification_count);
+
+        IF modification_count >= 5 THEN
+            INSERT INTO adjacent_room (direction_id, room_id, adjacent_room_id)
+            VALUES (3, 1, 2),
+                   (4, 2, 1),
+                   (2, 2, 3),
+                   (1, 3, 2),
+                   (3, 2, 4),
+                   (4, 4, 2),
+                   (1, 4, 5);
+
+
+            EXECUTE 'SELECT set_config(''myvars.modification_count'', ''0'', false)';
+        END IF;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER room_update_trigger
+    AFTER INSERT OR UPDATE ON room
+    FOR EACH ROW EXECUTE PROCEDURE update_adjacent_room();

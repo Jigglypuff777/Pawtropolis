@@ -1,6 +1,7 @@
 package pawtropolis.database.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pawtropolis.animals.Animal;
 import pawtropolis.database.entity.*;
@@ -45,8 +46,18 @@ public class GameService {
     }
 
     private BagEntity saveBag(Bag bag) {
-        return bagRepository.save(converter.fromBagToEntity(bag));
+        BagEntity bagEntity = converter.fromBagToEntity(bag);
+        if (!isFirstGame()) {
+            Optional<BagEntity> existingBagOptional = bagRepository.findById(bagEntity.getId());
+            if (existingBagOptional.isPresent()) {
+                BagEntity existingBag = existingBagOptional.get();
+                existingBag.setOccupiedSlots(bagEntity.getOccupiedSlots());
+                return bagRepository.save(existingBag);
+            }
+        }
+        return bagRepository.save(bagEntity);
     }
+
 
     private PlayerEntity savePlayer(Player playerToSave, BagEntity savedBag) {
         return playerRepository.save(converter.fromPlayerToEntity(playerToSave, savedBag));
@@ -64,12 +75,12 @@ public class GameService {
     }
 
     private List<RoomEntity> getRoomsToSave(List<Room> roomList) {
-        List<String> existingRoomNames = roomRepository.findAll().stream()
-                .map(RoomEntity::getName)
+        List<Long> existingRoomIds = roomRepository.findAll().stream()
+                .map(RoomEntity::getId)
                 .toList();
 
         return roomList.stream()
-                .filter(room -> !existingRoomNames.contains(room.getName()))
+                .filter(room -> !existingRoomIds.contains(room.getId()))
                 .map(converter::fromRoomToEntity)
                 .toList();
     }
@@ -111,14 +122,20 @@ public class GameService {
     }
 
     private void saveGame(PlayerEntity savedPlayer, Room currentRoom) {
-        GameEntity gameEntity = new GameEntity();
-        gameEntity.setPlayer(savedPlayer);
-
         RoomEntity roomEntity = roomRepository.findByName(currentRoom.getName());
-        gameEntity.setRoom(roomEntity);
-
-        gameRepository.save(gameEntity);
+        Optional<GameEntity> existingGameOptional = gameRepository.findByPlayer(savedPlayer);
+        if (existingGameOptional.isPresent()) {
+            GameEntity existingGame = existingGameOptional.get();
+            existingGame.setRoom(roomEntity);
+            gameRepository.save(existingGame);
+        } else {
+            GameEntity gameEntity = new GameEntity();
+            gameEntity.setPlayer(savedPlayer);
+            gameEntity.setRoom(roomEntity);
+            gameRepository.save(gameEntity);
+        }
     }
+
 
     public boolean isFirstGame() {
         List<PlayerEntity> playerRecords = playerRepository

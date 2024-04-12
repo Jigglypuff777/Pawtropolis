@@ -25,6 +25,7 @@ public class Converter {
 
     public PlayerEntity fromPlayerToEntity(Player player, BagEntity bagEntity) {
         PlayerEntity result = new PlayerEntity();
+        result.setId(player.getId());
         result.setName(player.getName());
         result.setLifePoints(player.getLifePoints());
         result.setBag(bagEntity);
@@ -40,6 +41,7 @@ public class Converter {
 
     public BagEntity fromBagToEntity(Bag bag) {
         BagEntity result = new BagEntity();
+        result.setId(bag.getId());
         result.setOccupiedSlots(bag.bagUsedSlots());
         return result;
     }
@@ -60,6 +62,7 @@ public class Converter {
 
     public ItemEntity fromItemToEntity(Item item, BagEntity bagEntity) {
         ItemEntity result = new ItemEntity();
+        result.setId(item.getId());
         result.setName(item.getName());
         result.setDescription(item.getDescription());
         result.setRequiredSlots(item.getSlotRequired());
@@ -86,6 +89,7 @@ public class Converter {
 
     public ItemEntity fromItemToEntityRoom(Item item, RoomEntity roomEntity) {
         ItemEntity result = new ItemEntity();
+        result.setId(item.getId());
         result.setName(item.getName());
         result.setDescription(item.getDescription());
         result.setRequiredSlots(item.getSlotRequired());
@@ -95,13 +99,13 @@ public class Converter {
 
     public AnimalEntity fromAnimalToEntity(Animal animal, RoomEntity roomEntity) {
         AnimalEntity result = new AnimalEntity();
+        result.setId(animal.getId());
         result.setName(animal.getNickname());
         result.setAge(animal.getAge());
         result.setFavouriteFood(animal.getFavoriteFood());
         result.setArrivalDate(animal.getDateEntry());
         result.setWeight(animal.getWeight());
         result.setHeight(animal.getHeight());
-        //TODO:IMPLEMENTARE SPECIES
         if (animal instanceof WingedAnimal wingedAnimal) {
             result.setWingspan(wingedAnimal.getWingspan());
         } else if (animal instanceof TailedAnimal tailedAnimal) {
@@ -115,6 +119,7 @@ public class Converter {
 
     public RoomEntity fromRoomToEntity(Room room) {
         RoomEntity result = new RoomEntity();
+        result.setId(room.getId());
         result.setName(room.getName());
         return result;
     }

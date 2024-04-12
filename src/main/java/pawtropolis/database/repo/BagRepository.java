@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import pawtropolis.database.entity.BagEntity;
 @Repository
 public interface BagRepository extends JpaRepository<BagEntity, Long> {
+
 }
