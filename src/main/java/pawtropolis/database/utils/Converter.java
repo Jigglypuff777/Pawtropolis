@@ -13,7 +13,8 @@ import pawtropolis.game.model.Item;
 import pawtropolis.game.model.Player;
 import pawtropolis.game.model.Room;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
@@ -124,21 +125,6 @@ public class Converter {
         return result;
     }
 
-    public EnumMap<DirectionEnum, Room> fromEntityListToAdjacentRoomMap(List<AdjacentRoomEntity> adjacentRoomEntities) {
-        EnumMap<DirectionEnum, Room> adjacentRoomsMap = new EnumMap<>(DirectionEnum.class);
-
-        adjacentRoomEntities.forEach(adjacentRoomEntity -> {
-            DirectionEntity directionEntity = adjacentRoomEntity.getDirection();
-            String directionName = directionEntity.getName(); // Get the direction name
-            DirectionEnum directionEnum = DirectionEnum.parseDirection(directionName); // Parse DirectionEnum from name
-
-            Room adjacentRoom = fromEntityToRoom(adjacentRoomEntity.getAdjacentRoom());
-
-            adjacentRoomsMap.put(directionEnum, adjacentRoom);
-        });
-
-        return adjacentRoomsMap;
-    }
 
     public Room fromEntityToRoom(RoomEntity roomEntity) {
         long resultId = roomEntity.getId();

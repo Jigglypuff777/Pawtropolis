@@ -1,9 +1,7 @@
 package pawtropolis.database.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pawtropolis.animals.Animal;
 import pawtropolis.database.entity.*;
 import pawtropolis.database.repo.*;
 import pawtropolis.database.utils.Converter;
@@ -14,8 +12,6 @@ import pawtropolis.game.model.Player;
 import pawtropolis.game.model.Room;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +37,7 @@ public class GameService {
         saveItems(bag, savedBag);
         saveRooms(gameController.getRoomList());
         saveAnimals(gameController.getRoomList());
+        saveItems(gameController.getRoomList());
 
         saveGame(savedPlayer, gameController.getCurrentRoom());
     }
@@ -85,12 +82,18 @@ public class GameService {
                 .toList();
     }
 
-    private void saveAnimals(List<Room> roomList) { //??????????
+    private void saveItems(List<Room> roomList) {
         roomList.forEach(room -> {
             RoomEntity roomEntity = roomRepository.findByName(room.getName());
             List<ItemEntity> itemListToSaveRoom = room.getItems().stream()
                     .map(item -> itemRepository.save(converter.fromItemToEntityRoom(item, roomEntity)))
                     .toList();
+        });
+    }
+
+    private void saveAnimals(List<Room> roomList) {
+        roomList.forEach(room -> {
+            RoomEntity roomEntity = roomRepository.findByName(room.getName());
             List<AnimalEntity> animalListToSave = room.getAnimals().stream()
                     .map(animal -> animalRepository.save(converter.fromAnimalToEntity(animal, roomEntity)))
                     .toList();

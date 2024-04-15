@@ -29,8 +29,7 @@ public class LookCommand implements Command {
         if (!gamePopulation.getCurrentRoom().getAnimals().isEmpty()) {
             System.out.println("NPC:");
             gamePopulation.getCurrentRoom().getAnimals().forEach(animal ->
-                    System.out.println("- " + animal.getNickname() + " (" +
-                            animal.getClass().getSimpleName() + ")"));
+                    System.out.println("- " + animal.getNickname()));
         } else {
             System.out.println("There are no NPCs in this room");
         }
